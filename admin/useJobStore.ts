@@ -1,7 +1,17 @@
 import { create } from 'zustand';
 import { JobPost, Section, SubSection, ContentBlock, BlockType, SectionChild } from '@/admin/types';
 
+export enum ViewMode {
+  EDIT = 'edit',
+  PREVIEW = 'preview'
+}
+
 interface JobState {
+  //view mode
+  viewMode: ViewMode;
+  setViewMode: (viewMode: ViewMode) => void;
+
+  //job
   job: JobPost;
   // Metadata
   setJob: (job: JobPost) => void;
@@ -34,6 +44,9 @@ const initialJob: JobPost = {
 };
 
 export const useJobStore = create<JobState>((set) => ({
+  viewMode: ViewMode.EDIT,
+  setViewMode: (viewMode) => set({ viewMode }),
+
   job: initialJob,
 
   setJob: (job) => set({ job }),

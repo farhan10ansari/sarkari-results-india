@@ -18,7 +18,7 @@ export default function HomePage() {
   const latestAdmissions = dummyAdmissions.slice(0, 6);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-col">
 
       <main className="flex flex-1 flex-col py-6 sm:py-8 lg:py-10">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">

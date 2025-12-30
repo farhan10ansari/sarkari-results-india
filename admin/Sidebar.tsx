@@ -1,15 +1,16 @@
 import React from 'react';
-import { Input } from '@/admin/components/input';
-import { Button } from '@/admin/components/button';
+import { CustomInput } from '@/admin/components/CustomInput';
+import { Button } from '@/components/ui/button';
 import { List } from 'lucide-react';
-import { useJobStore } from '@/admin/store/useJobStore';
+import { useJobStore, ViewMode } from '@/admin/useJobStore';
 
 interface SidebarProps {
   isVisible: boolean;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
-  const { job, updateMetadata, addSection } = useJobStore();
+
+  const { job, updateMetadata, addSection, viewMode, setViewMode } = useJobStore();
 
   if (!isVisible) return null;
 
@@ -18,12 +19,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
       <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 dark:bg-slate-900 dark:border-slate-800">
         <h2 className="text-xs font-black mb-4 uppercase text-slate-400 tracking-widest">Post Metadata</h2>
         <div className="space-y-4">
-          <Input
+          <CustomInput
             label="Title"
             value={job.title}
             onChange={e => updateMetadata({ title: e.target.value })}
           />
-          <Input
+          <CustomInput
             label="URL Slug"
             value={job.slug}
             onChange={e => updateMetadata({ slug: e.target.value })}

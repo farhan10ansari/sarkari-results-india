@@ -1,0 +1,40 @@
+import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { ContentBlock } from '@/admin/types';
+import { Eye, Edit2 } from 'lucide-react';
+
+interface MarkdownEditorProps {
+  block: ContentBlock;
+  onChange: (updates: Partial<ContentBlock>) => void;
+}
+
+export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ block, onChange }) => {
+  const [isPreview, setIsPreview] = useState(false);
+
+  return (
+    <div className="w-full">
+      <div className="flex justify-end mb-2">
+        <button
+          type="button"
+          onClick={() => setIsPreview(!isPreview)}
+          className="text-[10px] flex items-center gap-1 text-blue-600 font-bold uppercase tracking-wider"
+        >
+          {isPreview ? <><Edit2 size={10} /> Edit</> : <><Eye size={10} /> Preview</>}
+        </button>
+      </div>
+      {isPreview ? (
+        <div className="prose prose-sm max-w-none p-3 border rounded-md bg-slate-50 min-h-[100px] text-slate-800">
+          <ReactMarkdown>{block.value || '*No content provided*'}</ReactMarkdown>
+        </div>
+      ) : (
+        <textarea
+          className="w-full h-32 p-3 border border-slate-300 rounded-md text-sm text-slate-900 font-mono focus:ring-2 focus:ring-blue-500 outline-none bg-white shadow-inner"
+          value={block.value || ''}
+          onChange={(e) => onChange({ value: e.target.value })}
+          onMouseDown={(e) => e.stopPropagation()}
+          placeholder="Enter markdown formatted text..."
+        />
+      )}
+    </div>
+  );
+};

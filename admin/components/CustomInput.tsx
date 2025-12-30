@@ -5,7 +5,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     error?: string;
 }
 
-export const Input: React.FC<InputProps> = ({ label, error, className = '', ...props }) => {
+export const CustomInput: React.FC<InputProps> = ({ label, error, className = '', ...props }) => {
     return (
         <div className="w-full text-left">
             {label && <label className="block text-xs font-bold text-slate-500 mb-1 uppercase tracking-tight dark:text-slate-400">{label}</label>}
