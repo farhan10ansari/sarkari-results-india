@@ -29,6 +29,12 @@ export function Navbar() {
             </div>
 
             <div className="flex items-center gap-2 md:gap-4">
+                <Link
+                    href="/admin"
+                    className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gray-100 hover:bg-[#1173d4]/10 dark:bg-gray-800 dark:hover:bg-[#1173d4]/20 text-gray-600 dark:text-gray-300 md:h-10 md:w-10"
+                >
+                    <Building2 className="h-4 w-4 md:h-5 md:w-5" />
+                </Link>
                 <ThemeToggle />
                 <Link
                     href="/settings"
