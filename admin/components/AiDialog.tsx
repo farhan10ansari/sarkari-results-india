@@ -10,13 +10,13 @@ import {
 } from "@/components/ui/dialog";
 import { Wand2 } from "lucide-react";
 import { useState } from "react";
-import { parseJobDescriptionWithAI } from "../services/geminiService";
-import { useJobStore } from "../useJobStore";
+import { parsePageDescriptionWithAI } from "../services/geminiService";
+import { usePageStore } from "../usePageStore";
 export default function AiDialog() {
     const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const job = useJobStore(state => state.job)
-    const setJob = useJobStore((state) => state.setJob);
+    const page = usePageStore(state => state.page)
+    const setPage = usePageStore((state) => state.setPage);
 
     const [aiInput, setAiInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -27,8 +27,8 @@ export default function AiDialog() {
         if (!aiInput.trim()) return;
         setLoading(true);
         try {
-            const data = await parseJobDescriptionWithAI(aiInput);
-            setJob({ ...data, id: job.id, updatedAt: new Date().toISOString() } as any);
+            const data = await parsePageDescriptionWithAI(aiInput);
+            setPage({ ...data, id: page.id, updatedAt: new Date().toISOString() } as any);
             setIsModalOpen(false)
         } catch (e) { alert("Failed to extract data."); }
         setLoading(false);

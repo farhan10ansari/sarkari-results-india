@@ -8,8 +8,8 @@ interface KeyValueEditorProps {
 }
 
 export const KeyValueEditor: React.FC<KeyValueEditorProps> = ({ block, onChange }) => {
-  const isLink = block.type === BlockType.LINKS;
-  const isDate = block.type === BlockType.DATES;
+  const isLink = block.type === BlockType.LINK;
+  const isDate = block.type === BlockType.DATE;
 
   return (
     <div className="flex gap-4 items-end">

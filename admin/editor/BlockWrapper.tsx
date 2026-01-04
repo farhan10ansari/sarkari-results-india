@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ContentBlock } from '../../types';
+import { ContentBlock } from '@/admin/types';
 import { GripVertical, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 
 interface BlockWrapperProps {

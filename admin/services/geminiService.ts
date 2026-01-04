@@ -1,8 +1,8 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { JobPostDraft } from "../types";
+import { PagePostDraft } from "../types";
 
-export const parseJobDescriptionWithAI = async (rawText: string): Promise<JobPostDraft> => {
+export const parsePageDescriptionWithAI = async (rawText: string): Promise<PagePostDraft> => {
   if (!process.env.API_KEY) {
     throw new Error("API Key is missing");
   }
@@ -11,8 +11,8 @@ export const parseJobDescriptionWithAI = async (rawText: string): Promise<JobPos
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   const prompt = `
-    You are a data entry expert for a government job portal (like Sarkari Result).
-    I will provide raw text from a job notification. 
+    You are a data entry expert for a government page portal (like Sarkari Result).
+    I will provide raw text from a page notification. 
     You must extract the data and structure it into a JSON format suitable for the frontend application.
 
     The structure must be a JSON object with:
@@ -24,13 +24,13 @@ export const parseJobDescriptionWithAI = async (rawText: string): Promise<JobPos
 
     Definitions:
     
-    BlockType = "KEY_VALUE" | "TABLE" | "MARKDOWN" | "LINKS" | "DATES"
+    BlockType = "KEY_VALUE" | "TABLE" | "MARKDOWN" | "LINK" | "DATE"
 
     ContentBlock = {
       id: string (uuid),
       type: BlockType,
-      key: string (optional, for KV, DATES, LINKS),
-      value: string (optional, for KV, DATES, LINKS, MARKDOWN),
+      key: string (optional, for KV, DATE, LINK),
+      value: string (optional, for KV, DATE, LINK, MARKDOWN),
       tableData: { "columns": string[], "rows": Array<object> } (optional, for TABLE)
     }
 
@@ -50,10 +50,10 @@ export const parseJobDescriptionWithAI = async (rawText: string): Promise<JobPos
 
     Rules:
     - Group related data into Sections.
-    - Each "ContentBlock" must represent only ONE item. For example, if there are 3 important dates, create 3 separate ContentBlock objects of type "DATES".
-    - "DATES" type: key is the date label (e.g. "Last Date"), value is the date.
+    - Each "ContentBlock" must represent only ONE item. For example, if there are 3 important dates, create 3 separate ContentBlock objects of type "DATE".
+    - "DATE" type: key is the date label (e.g. "Last Date"), value is the date.
     - "KEY_VALUE" type: key is the field name (e.g. "Post Name"), value is the data.
-    - "LINKS" type: key is link text, value is URL.
+    - "LINK" type: key is link text, value is URL.
     - "MARKDOWN" type: value contains the text.
     - "TABLE" type: tableData contains columns and rows.
 
@@ -76,7 +76,7 @@ export const parseJobDescriptionWithAI = async (rawText: string): Promise<JobPos
 
   try {
     const data = JSON.parse(text);
-    return data as JobPostDraft;
+    return data as PagePostDraft;
   } catch (e) {
     console.error("Failed to parse AI response", e);
     throw new Error("AI generated invalid JSON");

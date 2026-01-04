@@ -17,18 +17,18 @@ const BlockRenderer: React.FC<{ block: ContentBlock }> = ({ block }) => {
       );
 
     case BlockType.KEY_VALUE:
-    case BlockType.DATES:
+    case BlockType.DATE:
       return (
         <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2 mb-2 last:mb-4">
           <span className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-            {block.type === BlockType.DATES && <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />}
+            {block.type === BlockType.DATE && <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />}
             {block.key}
           </span>
           <span className="text-slate-700 dark:text-slate-300 text-right font-medium">{block.value}</span>
         </div>
       );
 
-    case BlockType.LINKS:
+    case BlockType.LINK:
       return (
         <a
           href={block.value}

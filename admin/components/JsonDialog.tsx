@@ -8,16 +8,16 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Check, Copy, Download } from "lucide-react";
-import { useJobStore } from "../useJobStore";
+import { usePageStore } from "../usePageStore";
 import { useState } from "react";
 export default function JsonDialog() {
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     const [copied, setCopied] = useState(false);
-    const job = useJobStore((state) => state.job);
+    const page = usePageStore((state) => state.page);
 
     const handleCopyJson = () => {
-        navigator.clipboard.writeText(JSON.stringify(job, null, 2));
+        navigator.clipboard.writeText(JSON.stringify(page, null, 2));
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
@@ -40,7 +40,7 @@ export default function JsonDialog() {
                 </DialogHeader>
                 <div className="flex-1 p-6 overflow-auto font-mono">
                     <pre className="text-sm text-blue-600 dark:text-blue-400 leading-relaxed">
-                        {JSON.stringify(job, null, 2)}
+                        {JSON.stringify(page, null, 2)}
                     </pre>
                 </div>
                 <DialogFooter className="p-6 pt-4 border-t border-slate-200 dark:border-slate-800">

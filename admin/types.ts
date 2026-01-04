@@ -2,8 +2,8 @@ export enum BlockType {
   KEY_VALUE = 'KEY_VALUE',
   TABLE = 'TABLE',
   MARKDOWN = 'MARKDOWN',
-  LINKS = 'LINKS',
-  DATES = 'DATES'
+  LINK = 'LINK',
+  DATE = 'DATE'
 }
 
 export interface TableRow {
@@ -18,9 +18,9 @@ export interface TableData {
 export interface ContentBlock {
   id: string;
   type: BlockType;
-  key?: string;      
-  value?: string;    
-  tableData?: TableData; 
+  key?: string;
+  value?: string;
+  tableData?: TableData;
 }
 
 export interface SubSection {
@@ -39,14 +39,23 @@ export interface Section {
   children: SectionChild[];
 }
 
-export interface JobPost {
+
+export type PageType = 'job' | 'result' | 'admission' | 'answer-key' | 'offline-form';
+
+export interface PagePost {
   id: string;
   title: string;
   slug: string;
   shortDescription: string;
-  lastDate?: string;
+  // lastDate?: string;
   sections: Section[];
   updatedAt: string;
+  type: PageType;
+  category?: string;
+  importandDates?: {
+    startDateOfApplication?: Date;
+    lastDateOfApplication?: Date;
+  }
 }
 
-export type JobPostDraft = Omit<JobPost, 'id' | 'updatedAt'>;
+export type PagePostDraft = Omit<PagePost, 'id' | 'updatedAt'>;

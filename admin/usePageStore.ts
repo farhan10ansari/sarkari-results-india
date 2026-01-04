@@ -1,21 +1,21 @@
 import { create } from 'zustand';
-import { JobPost, Section, SubSection, ContentBlock, BlockType, SectionChild } from '@/admin/types';
+import { PagePost, Section, SubSection, ContentBlock, BlockType, SectionChild } from '@/admin/types';
 
 export enum ViewMode {
   EDIT = 'edit',
   PREVIEW = 'preview'
 }
 
-interface JobState {
+interface PageState {
   //view mode
   viewMode: ViewMode;
   setViewMode: (viewMode: ViewMode) => void;
 
-  //job
-  job: JobPost;
+  //page
+  page: PagePost;
   // Metadata
-  setJob: (job: JobPost) => void;
-  updateMetadata: (updates: Partial<JobPost>) => void;
+  setPage: (page: PagePost) => void;
+  updateMetadata: (updates: Partial<PagePost>) => void;
 
   // Sections
   addSection: () => void;
@@ -34,69 +34,70 @@ interface JobState {
   reorderChildren: (sectionId: string, startIndex: number, endIndex: number, subSectionId?: string) => void;
 }
 
-const initialJob: JobPost = {
-  id: '1',
+const initialPage: PagePost = {
+  id: crypto.randomUUID(),
   title: 'Government Clerk Vacancy 2024',
   slug: 'govt-clerk-vacancy-2024',
   shortDescription: 'Latest clerk recruitment notification.',
   updatedAt: new Date().toISOString(),
+  type: 'job',
   sections: []
 };
 
-export const useJobStore = create<JobState>((set) => ({
+export const usePageStore = create<PageState>((set) => ({
   viewMode: ViewMode.EDIT,
   setViewMode: (viewMode) => set({ viewMode }),
 
-  job: initialJob,
+  page: initialPage,
 
-  setJob: (job) => set({ job }),
+  setPage: (page) => set({ page }),
 
   updateMetadata: (updates) => set((state) => ({
-    job: { ...state.job, ...updates, updatedAt: new Date().toISOString() }
+    page: { ...state.page, ...updates, updatedAt: new Date().toISOString() }
   })),
 
   addSection: () => set((state) => {
-    const nextNum = state.job.sections.length + 1;
+    const nextNum = state.page.sections.length + 1;
     const newSection: Section = {
       id: crypto.randomUUID(),
       title: `Section ${nextNum}`,
       type: 'SECTION',
       children: []
     };
-    return { job: { ...state.job, sections: [...state.job.sections, newSection] } };
+    return { page: { ...state.page, sections: [...state.page.sections, newSection] } };
   }),
 
   updateSection: (sectionId, title) => set((state) => ({
-    job: {
-      ...state.job,
-      sections: state.job.sections.map(s => s.id === sectionId ? { ...s, title } : s)
+    page: {
+      ...state.page,
+      sections: state.page.sections.map(s => s.id === sectionId ? { ...s, title } : s)
     }
   })),
 
   deleteSection: (sectionId) => set((state) => ({
-    job: {
-      ...state.job,
-      sections: state.job.sections.filter(s => s.id !== sectionId)
+    page: {
+      ...state.page,
+      sections: state.page.sections.filter(s => s.id !== sectionId)
     }
   })),
 
   moveSection: (index, direction) => set((state) => {
-    const sections = [...state.job.sections];
+    const sections = [...state.page.sections];
     const targetIdx = direction === 'up' ? index - 1 : index + 1;
     if (targetIdx < 0 || targetIdx >= sections.length) return state;
     [sections[index], sections[targetIdx]] = [sections[targetIdx], sections[index]];
-    return { job: { ...state.job, sections } };
+    return { page: { ...state.page, sections } };
   }),
 
   reorderSections: (startIndex, endIndex) => set((state) => {
-    const sections = [...state.job.sections];
+    const sections = [...state.page.sections];
     const [removed] = sections.splice(startIndex, 1);
     sections.splice(endIndex, 0, removed);
-    return { job: { ...state.job, sections } };
+    return { page: { ...state.page, sections } };
   }),
 
   addSubSection: (sectionId) => set((state) => {
-    const sections = state.job.sections.map(s => {
+    const sections = state.page.sections.map(s => {
       if (s.id !== sectionId) return s;
       const subNum = s.children.filter(c => c.type === 'SUB_SECTION').length + 1;
       const newSub: SubSection = {
@@ -107,13 +108,13 @@ export const useJobStore = create<JobState>((set) => ({
       };
       return { ...s, children: [...s.children, newSub] };
     });
-    return { job: { ...state.job, sections } };
+    return { page: { ...state.page, sections } };
   }),
 
   updateSubSection: (sectionId, subSectionId, title) => set((state) => ({
-    job: {
-      ...state.job,
-      sections: state.job.sections.map(s => {
+    page: {
+      ...state.page,
+      sections: state.page.sections.map(s => {
         if (s.id !== sectionId) return s;
         return {
           ...s,
@@ -132,7 +133,7 @@ export const useJobStore = create<JobState>((set) => ({
         : type === BlockType.MARKDOWN ? { value: '' } : { key: '', value: '' })
     };
 
-    const sections = state.job.sections.map(s => {
+    const sections = state.page.sections.map(s => {
       if (s.id !== sectionId) return s;
       if (subSectionId) {
         return {
@@ -147,13 +148,13 @@ export const useJobStore = create<JobState>((set) => ({
       }
       return { ...s, children: [...s.children, newBlock] };
     });
-    return { job: { ...state.job, sections } };
+    return { page: { ...state.page, sections } };
   }),
 
   updateBlock: (sectionId, blockId, updates, subSectionId) => set((state) => ({
-    job: {
-      ...state.job,
-      sections: state.job.sections.map(s => {
+    page: {
+      ...state.page,
+      sections: state.page.sections.map(s => {
         if (s.id !== sectionId) return s;
         if (subSectionId) {
           return {
@@ -175,9 +176,9 @@ export const useJobStore = create<JobState>((set) => ({
   })),
 
   deleteChild: (sectionId, childId, subSectionId) => set((state) => ({
-    job: {
-      ...state.job,
-      sections: state.job.sections.map(s => {
+    page: {
+      ...state.page,
+      sections: state.page.sections.map(s => {
         if (s.id !== sectionId) return s;
         if (subSectionId) {
           return {
@@ -196,7 +197,7 @@ export const useJobStore = create<JobState>((set) => ({
   })),
 
   moveChild: (sectionId, index, direction, subSectionId) => set((state) => {
-    const sections = state.job.sections.map(s => {
+    const sections = state.page.sections.map(s => {
       if (s.id !== sectionId) return s;
 
       const move = (arr: any[], idx: number) => {
@@ -220,11 +221,11 @@ export const useJobStore = create<JobState>((set) => ({
       }
       return { ...s, children: move(s.children, index) };
     });
-    return { job: { ...state.job, sections } };
+    return { page: { ...state.page, sections } };
   }),
 
   reorderChildren: (sectionId, startIndex, endIndex, subSectionId) => set((state) => {
-    const sections = state.job.sections.map(s => {
+    const sections = state.page.sections.map(s => {
       if (s.id !== sectionId) return s;
 
       const reorder = (arr: any[]) => {
@@ -247,6 +248,6 @@ export const useJobStore = create<JobState>((set) => ({
       }
       return { ...s, children: reorder(s.children) };
     });
-    return { job: { ...state.job, sections } };
+    return { page: { ...state.page, sections } };
   })
 }));

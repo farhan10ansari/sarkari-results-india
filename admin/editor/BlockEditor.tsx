@@ -4,7 +4,7 @@ import { BlockWrapper } from '@/admin/editor/BlockWrapper';
 import { KeyValueEditor } from '@/admin/editor/blocks/KeyValueEditor';
 import { MarkdownEditor } from '@/admin/editor/blocks/MarkdownEditor';
 import { TableEditor } from '@/admin/editor/blocks/TableEditor';
-import { useJobStore } from '@/admin/useJobStore';
+import { usePageStore } from '@/admin/usePageStore';
 
 interface BlockEditorProps {
   sectionId: string;
@@ -20,7 +20,7 @@ interface BlockEditorProps {
 
 export const BlockEditor: React.FC<BlockEditorProps> = (props) => {
   const { block, sectionId, subSectionId, index } = props;
-  const { updateBlock, deleteChild, moveChild } = useJobStore();
+  const { updateBlock, deleteChild, moveChild } = usePageStore();
 
   const handleUpdate = (updates: Partial<ContentBlock>) => {
     updateBlock(sectionId, block.id, updates, subSectionId);
@@ -38,8 +38,8 @@ export const BlockEditor: React.FC<BlockEditorProps> = (props) => {
   const renderInnerEditor = () => {
     switch (block.type) {
       case BlockType.KEY_VALUE:
-      case BlockType.DATES:
-      case BlockType.LINKS:
+      case BlockType.DATE:
+      case BlockType.LINK:
         return <KeyValueEditor block={block} onChange={handleUpdate} />;
       case BlockType.MARKDOWN:
         return <MarkdownEditor block={block} onChange={handleUpdate} />;

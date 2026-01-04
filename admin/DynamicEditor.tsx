@@ -3,7 +3,7 @@ import { Section, SubSection, BlockType } from '@/admin/types';
 import { Button } from '@/components/ui/button';
 import { Trash2, GripVertical, ChevronDown, ChevronRight, ArrowUp, ArrowDown, LayoutPanelTop } from 'lucide-react';
 import { BlockEditor } from '@/admin/editor/BlockEditor';
-import { useJobStore } from '@/admin/useJobStore';
+import { usePageStore } from '@/admin/usePageStore';
 
 interface DynamicEditorProps {
   section: Section;
@@ -25,7 +25,7 @@ export const DynamicEditor: React.FC<DynamicEditorProps> = ({
   const {
     updateSection, deleteSection, addSubSection,
     updateSubSection, addBlock, moveChild, reorderChildren, deleteChild
-  } = useJobStore();
+  } = usePageStore();
 
   const [isExpanded, setIsExpanded] = useState(true);
   const [canDragSection, setCanDragSection] = useState(false);
@@ -57,7 +57,7 @@ export const DynamicEditor: React.FC<DynamicEditorProps> = ({
 
   const renderAddBlockButtons = (subSectionId?: string) => (
     <div className="flex flex-wrap gap-2 mt-2">
-      {[BlockType.KEY_VALUE, BlockType.TABLE, BlockType.MARKDOWN, BlockType.LINKS, BlockType.DATES].map(type => (
+      {[BlockType.KEY_VALUE, BlockType.TABLE, BlockType.MARKDOWN, BlockType.LINK, BlockType.DATE].map(type => (
         <Button
           key={type}
           type="button" size="sm" variant="outline"
