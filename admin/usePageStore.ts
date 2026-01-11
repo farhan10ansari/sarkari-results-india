@@ -32,23 +32,28 @@ interface PageState {
   updateBlock: (sectionId: string, blockId: string, updates: Partial<IFieldWithoutSubSection>, subSectionId?: string) => void;
   moveChild: (sectionId: string, index: number, direction: 'up' | 'down', subSectionId?: string) => void;
   reorderChildren: (sectionId: string, startIndex: number, endIndex: number, subSectionId?: string) => void;
+
+  // reset page
+  resetPage: () => void;
 }
 
-const initialPage: IPage = {
-  _id: crypto.randomUUID(),
-  title: 'Government Clerk Vacancy 2024',
-  slug: 'govt-clerk-vacancy-2024',
-  description: 'Latest clerk recruitment notification.',
-  updatedAt: new Date().toISOString(),
-  type: PageType.JOB,
-  sections: []
-};
+function getInitialPage(): IPage {
+  return {
+    _id: crypto.randomUUID(),
+    title: '',
+    slug: '',
+    description: '',
+    updatedAt: new Date().toISOString(),
+    type: PageType.JOB,
+    sections: []
+  }
+}
 
 export const usePageStore = create<PageState>((set) => ({
   viewMode: ViewMode.EDIT,
   setViewMode: (viewMode) => set({ viewMode }),
 
-  page: initialPage,
+  page: getInitialPage(),
 
   setPage: (page) => set({ page }),
 
@@ -274,5 +279,7 @@ export const usePageStore = create<PageState>((set) => ({
       return { ...s, children: reorder(s.children) };
     });
     return { page: { ...state.page, sections } };
-  })
+  }),
+
+  resetPage: () => set({ page: getInitialPage() }),
 }));

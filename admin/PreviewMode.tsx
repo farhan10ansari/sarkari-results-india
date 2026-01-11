@@ -1,8 +1,11 @@
 import { PreviewSection } from "./PreviewSection";
-import { usePageStore } from "./usePageStore";
+import { IPage } from "@/lib/page.types";
 
-export default function PreviewMode() {
-    const page = usePageStore((state) => state.page);
+type Props = {
+    page: IPage;
+}
+
+export default function PreviewMode({ page }: Props) {
     return (
         <div className="bg-white shadow-2xl rounded-3xl overflow-hidden border border-slate-200 max-w-4xl mx-auto text-slate-900 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-100">
             <div className="bg-slate-900 p-16 text-center text-white dark:bg-black">

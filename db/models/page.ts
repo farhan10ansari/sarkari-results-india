@@ -1,5 +1,5 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import { IPage, PageType, FieldType, SectionType, PageStatus } from '../../lib/page.types';
+import { IPage, PageType, SectionType, PageStatus } from '@/lib/page.types';
 
 const PageSchema = new Schema<IPage>(
   {

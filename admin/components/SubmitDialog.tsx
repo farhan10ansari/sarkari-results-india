@@ -7,22 +7,39 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+import { toast } from "sonner"
 import { Loader2, Send } from "lucide-react";
 import { useState } from "react";
+import { usePageStore } from "@/admin/usePageStore";
+import { CreateNewPage } from "@/service/ApiService";
+import { useRouter } from "next/navigation";
+
 
 export default function SubmitDialog() {
+    const page = usePageStore((state) => state.page);
+    const resetPage = usePageStore((state) => state.resetPage);
     const [isOpen, setIsOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const router = useRouter();
 
     const handleSubmit = async () => {
         try {
             setIsSubmitting(true);
 
-            // 👉 your submit logic here
-            // await submitPage(page);
-            await new Promise((res) => setTimeout(res, 1500));
+            // submit logic 
+            console.log("submitting")
+            const res = await CreateNewPage(page);
+            const slug = page.slug
+            toast.success(res?.data.message)
+            setIsOpen(false)
+            setTimeout(() => {
+                resetPage()
+                router?.push(`/page/${slug}`)
+            }, 1000)
 
-            setIsOpen(false);
+
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message ?? "Something went wrong")
         } finally {
             setIsSubmitting(false);
         }
@@ -57,7 +74,6 @@ export default function SubmitDialog() {
                     >
                         Cancel
                     </Button>
-
                     <Button
                         onClick={handleSubmit}
                         disabled={isSubmitting}

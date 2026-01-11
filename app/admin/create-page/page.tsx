@@ -12,6 +12,7 @@ import { Eye, PenLine } from "lucide-react";
 export default function AdminPage() {
     const viewMode = usePageStore((state) => state.viewMode);
     const setViewMode = usePageStore((state) => state.setViewMode);
+    const page = usePageStore((state) => state.page);
 
     return (
         <div className="flex-1 flex flex-col overflow-y-auto">
@@ -52,7 +53,7 @@ export default function AdminPage() {
                     {viewMode === 'edit' ? (
                         <EditMode />
                     ) : (
-                        <PreviewMode />
+                        <PreviewMode page={page} />
                     )}
                 </div>
             </div>
