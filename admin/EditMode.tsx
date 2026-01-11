@@ -17,7 +17,7 @@ export default function EditMode() {
             )}
             {page.sections.map((section, index) => (
                 <DynamicEditor
-                    key={section.id}
+                    key={section._id}
                     section={section}
                     onMoveUp={() => moveSection(index, 'up')}
                     onMoveDown={() => moveSection(index, 'down')}

@@ -1,15 +1,15 @@
 import React from 'react';
-import { ContentBlock, BlockType } from '@/admin/types';
+import { IFieldWithoutSubSection, FieldType, IKeyValueField, IDateField, ILinkField } from '@/lib/page.types';
 import { CustomInput } from '@/admin/components/CustomInput';
 
 interface KeyValueEditorProps {
-  block: ContentBlock;
-  onChange: (updates: Partial<ContentBlock>) => void;
+  block: IKeyValueField | ILinkField | IDateField;
+  onChange: (updates: Partial<IKeyValueField | ILinkField | IDateField>) => void;
 }
 
 export const KeyValueEditor: React.FC<KeyValueEditorProps> = ({ block, onChange }) => {
-  const isLink = block.type === BlockType.LINK;
-  const isDate = block.type === BlockType.DATE;
+  const isLink = block.type === FieldType.LINK;
+  const isDate = block.type === FieldType.DATE;
 
   return (
     <div className="flex gap-4 items-end">

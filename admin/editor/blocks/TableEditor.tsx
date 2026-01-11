@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { ContentBlock, TableData } from '@/admin/types';
 import { Button } from '@/components/ui/button';
 import { Trash2, Plus, X, Columns } from 'lucide-react';
+import { ITableData, ITableField } from '@/lib/page.types';
 
 interface TableEditorProps {
-  block: ContentBlock;
-  onChange: (updates: Partial<ContentBlock>) => void;
+  block: ITableField;
+  onChange: (updates: Partial<ITableField>) => void;
 }
 
 export const TableEditor: React.FC<TableEditorProps> = ({ block, onChange }) => {
-  const data: TableData = block.tableData || { columns: [], rows: [] };
+  const data: ITableData = block.tableData || { columns: [], rows: [] };
   const [newColName, setNewColName] = useState('');
 
   const addColumn = () => {

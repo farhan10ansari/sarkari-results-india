@@ -2,7 +2,7 @@ import React from 'react';
 import { CustomInput } from '@/admin/components/CustomInput';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, CalendarIcon, List } from 'lucide-react';
-import { usePageStore, ViewMode } from '@/admin/usePageStore';
+import { usePageStore } from '@/admin/usePageStore';
 import Link from 'next/link';
 import {
   Select,
@@ -12,7 +12,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Card } from '@/components/ui/card';
-import { PageType } from './types';
 import { Calendar } from "@/components/ui/calendar"
 import {
   Popover,
@@ -20,6 +19,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { format } from 'date-fns';
+import { PageType } from '@/lib/page.types';
 
 interface SidebarProps {
   isVisible: boolean;
@@ -28,6 +28,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
 
   const { page, updateMetadata, addSection } = usePageStore();
+  console.log("page", page);
   const [isStartDatePickerOpen, setIsStartDatePickerOpen] = React.useState(false);
   const [isLastDatePickerOpen, setIsLastDatePickerOpen] = React.useState(false);
   if (!isVisible) return null;
@@ -53,6 +54,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
             </SelectContent>
           </Select>
         </div>
+        <CustomInput
+          label="URL Slug"
+          value={page.slug}
+          onChange={e => updateMetadata({ slug: e.target.value })}
+        />
       </Card>
 
 
@@ -63,11 +69,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
             label="Title"
             value={page.title}
             onChange={e => updateMetadata({ title: e.target.value })}
-          />
-          <CustomInput
-            label="URL Slug"
-            value={page.slug}
-            onChange={e => updateMetadata({ slug: e.target.value })}
           />
           <div>
             <label className="block text-xs font-bold text-slate-500 mb-2 tracking-tighter dark:text-slate-400">Category</label>
@@ -94,12 +95,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
                   className="w-full dark:bg-slate-800 hover:dark:bg-slate-700 data-[empty=true]:text-muted-foreground justify-start text-left font-normal"
                 >
                   <CalendarIcon />
-                  {page?.importandDates?.startDateOfApplication ? format(page.importandDates.startDateOfApplication, "PPP") : <span>Pick a date</span>}
+                  {page?.importantDates?.startDateOfApplication ? format(page.importantDates.startDateOfApplication, "PPP") : <span>Pick a date</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
-                <Calendar mode="single" selected={page?.importandDates?.startDateOfApplication} onSelect={(date) => {
-                  updateMetadata({ importandDates: { ...page.importandDates, startDateOfApplication: date } })
+                <Calendar mode="single" selected={page?.importantDates?.startDateOfApplication ? new Date(page.importantDates.startDateOfApplication) : undefined} onSelect={(date) => {
+                  updateMetadata({ importantDates: { ...page.importantDates, startDateOfApplication: date?.toISOString() } })
                   setIsStartDatePickerOpen(false);
                 }} />
               </PopoverContent>
@@ -115,12 +116,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
                   className="w-full dark:bg-slate-800 hover:dark:bg-slate-700 data-[empty=true]:text-muted-foreground justify-start text-left font-normal"
                 >
                   <CalendarIcon />
-                  {page?.importandDates?.lastDateOfApplication ? format(page.importandDates.lastDateOfApplication, "PPP") : <span>Pick a date</span>}
+                  {page?.importantDates?.lastDateOfApplication ? format(page.importantDates.lastDateOfApplication, "PPP") : <span>Pick a date</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
-                <Calendar mode="single" selected={page?.importandDates?.lastDateOfApplication} onSelect={(date) => {
-                  updateMetadata({ importandDates: { ...page.importandDates, lastDateOfApplication: date } })
+                <Calendar mode="single" selected={page?.importantDates?.lastDateOfApplication ? new Date(page.importantDates.lastDateOfApplication) : undefined} onSelect={(date) => {
+                  updateMetadata({ importantDates: { ...page.importantDates, lastDateOfApplication: date?.toISOString() } })
                   setIsLastDatePickerOpen(false);
                 }} />
               </PopoverContent>
@@ -130,8 +131,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
             <label className="block text-xs font-bold text-slate-500 mb-1 uppercase tracking-tighter dark:text-slate-400">Summary</label>
             <textarea
               className="w-full p-2 border border-slate-300 rounded-lg text-sm min-h-[80px] text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100"
-              value={page.shortDescription}
-              onChange={e => updateMetadata({ shortDescription: e.target.value })}
+              value={page.description}
+              onChange={e => updateMetadata({ description: e.target.value })}
             />
           </div>
         </div>
@@ -148,7 +149,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
         </div>
         <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
           {page.sections.map((sec, idx) => (
-            <div key={sec.id} className="flex items-center justify-between text-xs p-2.5 bg-slate-50 rounded border border-slate-200 group dark:bg-slate-800/50 dark:border-slate-700">
+            <div key={sec._id} className="flex items-center justify-between text-xs p-2.5 bg-slate-50 rounded border border-slate-200 group dark:bg-slate-800/50 dark:border-slate-700">
               <span className="truncate flex-1 font-semibold text-slate-600 italic dark:text-slate-300">
                 {sec.title || 'Untitled'}
               </span>

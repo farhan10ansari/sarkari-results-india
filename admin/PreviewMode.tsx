@@ -8,10 +8,10 @@ export default function PreviewMode() {
             <div className="bg-slate-900 p-16 text-center text-white dark:bg-black">
 
                 <h1 className="text-5xl font-black mb-6 leading-tight tracking-tighter">{page.title}</h1>
-                <p className="text-slate-400 text-lg font-medium max-w-2xl mx-auto">{page.shortDescription}</p>
+                <p className="text-slate-400 text-lg font-medium max-w-2xl mx-auto">{page.description}</p>
             </div>
             <div className="p-8 lg:p-12 space-y-8 bg-slate-50/30 dark:bg-slate-900/50">
-                {page.sections.map(s => <PreviewSection key={s.id} section={s} />)}
+                {page.sections.map(s => <PreviewSection key={s._id} section={s} />)}
             </div>
         </div>
     );

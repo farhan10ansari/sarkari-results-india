@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { ContentBlock } from '@/admin/types';
+import { IMarkdownField } from '@/lib/page.types';
 import { Eye, Edit2 } from 'lucide-react';
 
 interface MarkdownEditorProps {
-  block: ContentBlock;
-  onChange: (updates: Partial<ContentBlock>) => void;
+  block: IMarkdownField;
+  onChange: (updates: Partial<IMarkdownField>) => void;
 }
 
 export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ block, onChange }) => {

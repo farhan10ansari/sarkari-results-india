@@ -1,15 +1,15 @@
 import React from 'react';
-import { ContentBlock, BlockType } from '@/admin/types';
 import { BlockWrapper } from '@/admin/editor/BlockWrapper';
 import { KeyValueEditor } from '@/admin/editor/blocks/KeyValueEditor';
 import { MarkdownEditor } from '@/admin/editor/blocks/MarkdownEditor';
 import { TableEditor } from '@/admin/editor/blocks/TableEditor';
 import { usePageStore } from '@/admin/usePageStore';
+import { FieldType, IFieldWithoutSubSection } from '@/lib/page.types';
 
 interface BlockEditorProps {
   sectionId: string;
   subSectionId?: string;
-  block: ContentBlock;
+  block: IFieldWithoutSubSection;
   index: number;
   isFirst: boolean;
   isLast: boolean;
@@ -22,13 +22,13 @@ export const BlockEditor: React.FC<BlockEditorProps> = (props) => {
   const { block, sectionId, subSectionId, index } = props;
   const { updateBlock, deleteChild, moveChild } = usePageStore();
 
-  const handleUpdate = (updates: Partial<ContentBlock>) => {
-    updateBlock(sectionId, block.id, updates, subSectionId);
+  const handleUpdate = (updates: Partial<IFieldWithoutSubSection>) => {
+    updateBlock(sectionId, block._id, updates, subSectionId);
   };
 
   const handleDelete = () => {
     if (confirm("Delete this block?")) {
-      deleteChild(sectionId, block.id, subSectionId);
+      deleteChild(sectionId, block._id, subSectionId);
     }
   };
 
@@ -37,13 +37,13 @@ export const BlockEditor: React.FC<BlockEditorProps> = (props) => {
 
   const renderInnerEditor = () => {
     switch (block.type) {
-      case BlockType.KEY_VALUE:
-      case BlockType.DATE:
-      case BlockType.LINK:
+      case FieldType.KEY_VALUE:
+      case FieldType.DATE:
+      case FieldType.LINK:
         return <KeyValueEditor block={block} onChange={handleUpdate} />;
-      case BlockType.MARKDOWN:
+      case FieldType.MARKDOWN:
         return <MarkdownEditor block={block} onChange={handleUpdate} />;
-      case BlockType.TABLE:
+      case FieldType.TABLE:
         return <TableEditor block={block} onChange={handleUpdate} />;
       default:
         return <div className="text-xs text-red-500">Unknown block type</div>;

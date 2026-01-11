@@ -1,6 +1,9 @@
 
+import { IPage } from "@/lib/page.types";
 import { GoogleGenAI } from "@google/genai";
-import { PagePostDraft } from "../types";
+
+
+export type PagePostDraft = Omit<IPage, '_id' | 'updatedAt'>;
 
 export const parsePageDescriptionWithAI = async (rawText: string): Promise<PagePostDraft> => {
   if (!process.env.API_KEY) {

@@ -2,6 +2,7 @@
 
 import AiDialog from "@/admin/components/AiDialog";
 import JsonDialog from "@/admin/components/JsonDialog";
+import SubmitDialog from "@/admin/components/SubmitDialog";
 import EditMode from "@/admin/EditMode";
 import PreviewMode from "@/admin/PreviewMode";
 import { Sidebar } from "@/admin/Sidebar";
@@ -44,6 +45,7 @@ export default function AdminPage() {
                             <div className="flex items-center gap-2">
                                 <AiDialog />
                                 <JsonDialog />
+                                <SubmitDialog />
                             </div>
                         </div>
                     </div>

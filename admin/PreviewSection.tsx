@@ -1,34 +1,35 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Section, ContentBlock, BlockType } from '@/admin/types';
+// import { Section, ContentBlock, BlockType } from '@/admin/types';
 import { ExternalLink, Calendar, CheckCircle2 } from 'lucide-react';
+import { FieldType, IFieldWithoutSubSection, ISection } from '@/lib/page.types';
 
 interface PreviewSectionProps {
-  section: Section;
+  section: ISection;
 }
 
-const BlockRenderer: React.FC<{ block: ContentBlock }> = ({ block }) => {
+const BlockRenderer: React.FC<{ block: IFieldWithoutSubSection }> = ({ block }) => {
   switch (block.type) {
-    case BlockType.MARKDOWN:
+    case FieldType.MARKDOWN:
       return (
         <div className="prose prose-sm prose-slate max-w-none text-slate-800 dark:text-slate-200 mb-4 prose-headings:dark:text-slate-100 prose-strong:dark:text-white">
           <ReactMarkdown>{block.value || ''}</ReactMarkdown>
         </div>
       );
 
-    case BlockType.KEY_VALUE:
-    case BlockType.DATE:
+    case FieldType.KEY_VALUE:
+    case FieldType.DATE:
       return (
         <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2 mb-2 last:mb-4">
           <span className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-            {block.type === BlockType.DATE && <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />}
+            {block.type === FieldType.DATE && <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />}
             {block.key}
           </span>
           <span className="text-slate-700 dark:text-slate-300 text-right font-medium">{block.value}</span>
         </div>
       );
 
-    case BlockType.LINK:
+    case FieldType.LINK:
       return (
         <a
           href={block.value}
@@ -43,7 +44,7 @@ const BlockRenderer: React.FC<{ block: ContentBlock }> = ({ block }) => {
         </a>
       );
 
-    case BlockType.TABLE:
+    case FieldType.TABLE:
       const tableData = block.tableData || { columns: [], rows: [] };
       if (tableData.columns.length === 0) return null;
       return (
@@ -91,17 +92,17 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ section }) => {
         {section.children.map(child => {
           if (child.type === 'SUB_SECTION') {
             return (
-              <div key={child.id} className="mb-10 last:mb-0">
+              <div key={child._id} className="mb-10 last:mb-0">
                 <h4 className="text-lg font-black text-slate-900 dark:text-slate-100 mb-6 border-l-4 border-blue-600 dark:border-blue-400 pl-4 uppercase tracking-tight">
                   {child.title}
                 </h4>
                 <div className="space-y-1">
-                  {child.children.map(block => <BlockRenderer key={block.id} block={block} />)}
+                  {child.children.map(block => <BlockRenderer key={block._id} block={block} />)}
                 </div>
               </div>
             )
           } else {
-            return <BlockRenderer key={child.id} block={child as ContentBlock} />
+            return <BlockRenderer key={child._id} block={child as IFieldWithoutSubSection} />
           }
         })}
       </div>
