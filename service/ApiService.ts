@@ -11,5 +11,5 @@ const _axios = axios.create({
 
 
 export const CreateNewPage = async (page: IPage) => {
-    return _axios.post<APIResponse<null>>("/api/admin/create-page", page);
+    return _axios.post<APIResponse<null>>("/api/admin/pages", page);
 };
