@@ -21,6 +21,7 @@ interface ConfirmationDialogProps {
     onConfirm: () => void;
     variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
     loading?: boolean;
+    extraActions?: React.ReactNode;
 }
 
 export function ConfirmationDialog({
@@ -33,6 +34,7 @@ export function ConfirmationDialog({
     onConfirm,
     variant = "default",
     loading = false,
+    extraActions,
 }: ConfirmationDialogProps) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -43,7 +45,7 @@ export function ConfirmationDialog({
                         {description}
                     </DialogDescription>
                 </DialogHeader>
-                <DialogFooter className="gap-2">
+                <DialogFooter className="gap-2 sm:gap-2 flex-col sm:flex-row">
                     <Button
                         variant="outline"
                         onClick={() => onOpenChange(false)}
@@ -60,6 +62,7 @@ export function ConfirmationDialog({
                     >
                         {loading ? "Processing..." : confirmLabel}
                     </Button>
+                    {extraActions}
                 </DialogFooter>
             </DialogContent>
         </Dialog>

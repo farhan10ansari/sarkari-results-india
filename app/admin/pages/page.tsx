@@ -11,7 +11,7 @@ import {
     ArrowLeft
 } from 'lucide-react';
 import Link from 'next/link';
-import { GetAllPages, UpdatePage, DeletePage } from '@/service/ApiService';
+import { GetAllPages, UpdatePage, DeletePage, PermanentDeletePage } from '@/service/ApiService';
 import { IPage, PageStatus } from '@/lib/page.types';
 import {
     Table,
@@ -117,8 +117,42 @@ export default function AllPages() {
         }
     };
 
+    const exportPageAsJson = (page: IPage) => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(page, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", `${page.slug || 'page'}.json`);
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+
+    const handlePermanentDelete = async () => {
+        if (!deleteId) return;
+        const pageToDelete = pages.find(p => p._id === deleteId);
+        if (pageToDelete) {
+            exportPageAsJson(pageToDelete);
+        }
+
+        setIsDeleting(true);
+        try {
+            const res = await PermanentDeletePage(deleteId);
+            if (res.data.success) {
+                toast.success("Page permanently deleted");
+                fetchPages();
+            } else {
+                toast.error(res.data.message || "Failed to delete page");
+            }
+        } catch (error) {
+            toast.error("An error occurred while deleting page");
+        } finally {
+            setIsDeleting(false);
+            setDeleteId(null);
+        }
+    };
+
     return (
-        <div className="w-full max-w-[95%] xl:max-w-[1800px] mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-y-auto px-4 py-8">
+        <div className="w-full max-w-[95%] xl:max-w-[1800px] mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-y-auto px-4 lg:px-10 py-8">
             <div className="flex items-center gap-4">
                 <Button variant="outline" size="icon" asChild>
                     <Link href="/admin">
@@ -273,11 +307,21 @@ export default function AllPages() {
                 open={!!deleteId}
                 onOpenChange={(open) => !open && setDeleteId(null)}
                 title="Move to Trash"
-                description="Are you sure you want to move this page to trash? You can restore it later from the trash if needed."
+                description="Are you sure you want to move this page to trash? You can restore it later. Or verify and permanently delete (data will be exported)."
                 confirmLabel="Move to Trash"
                 variant="destructive"
                 onConfirm={handleConfirmDelete}
                 loading={isDeleting}
+                extraActions={
+                    <Button
+                        variant="destructive"
+                        onClick={handlePermanentDelete}
+                        disabled={isDeleting}
+                        className="bg-red-700 hover:bg-red-800"
+                    >
+                        Permanent Delete & Export
+                    </Button>
+                }
             />
         </div>
     );

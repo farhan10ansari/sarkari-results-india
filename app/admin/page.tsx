@@ -14,7 +14,7 @@ import {
     Pencil
 } from 'lucide-react';
 import Link from 'next/link';
-import { GetAllPages, UpdatePage, DeletePage, GetDashboardStats } from '@/service/ApiService';
+import { GetAllPages, UpdatePage, DeletePage, GetDashboardStats, PermanentDeletePage } from '@/service/ApiService';
 import { IPage, PageStatus } from '@/lib/page.types';
 import {
     Table,
@@ -117,8 +117,42 @@ const DashboardHome: React.FC = () => {
         }
     };
 
+    const exportPageAsJson = (page: IPage) => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(page, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", `${page.slug || 'page'}.json`);
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+
+    const handlePermanentDelete = async () => {
+        if (!deleteId) return;
+        const pageToDelete = pages.find(p => p._id === deleteId);
+        if (pageToDelete) {
+            exportPageAsJson(pageToDelete);
+        }
+
+        setIsDeleting(true);
+        try {
+            const res = await PermanentDeletePage(deleteId);
+            if (res.data.success) {
+                toast.success("Page permanently deleted");
+                fetchData();
+            } else {
+                toast.error(res.data.message || "Failed to delete page");
+            }
+        } catch (error) {
+            toast.error("An error occurred while deleting page");
+        } finally {
+            setIsDeleting(false);
+            setDeleteId(null);
+        }
+    };
+
     return (
-        <div className="max-w-6xl mx-5 xl:mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-y-auto px-1 pb-10">
+        <div className="max-w-7xl mx-5 xl:mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-y-auto px-1 pb-10">
             {/* Hero Section */}
             <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-8">
                 <div>
@@ -310,11 +344,21 @@ const DashboardHome: React.FC = () => {
                 open={!!deleteId}
                 onOpenChange={(open) => !open && setDeleteId(null)}
                 title="Move to Trash"
-                description="Are you sure you want to move this page to trash? You can restore it later from the trash if needed."
+                description="Are you sure you want to move this page to trash? You can restore it later. Or verify and permanently delete (data will be exported)."
                 confirmLabel="Move to Trash"
                 variant="destructive"
                 onConfirm={handleConfirmDelete}
                 loading={isDeleting}
+                extraActions={
+                    <Button
+                        variant="destructive"
+                        onClick={handlePermanentDelete}
+                        disabled={isDeleting}
+                        className="bg-red-700 hover:bg-red-800"
+                    >
+                        Permanent Delete & Export
+                    </Button>
+                }
             />
         </div>
     );

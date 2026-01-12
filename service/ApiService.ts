@@ -33,6 +33,10 @@ export const DeletePage = async (id: string) => {
     return UpdatePage(id, { status: PageStatus.TRASHED }); // Assuming PageStatus enum is available or string 'TRASHED'
 };
 
+export const PermanentDeletePage = async (id: string) => {
+    return _axios.delete<APIResponse<null>>(`/api/admin/pages/${id}`);
+};
+
 export const GetDashboardStats = async () => {
     return _axios.get<APIResponse<{ total: number, published: number, drafts: number }>>('/api/admin/stats');
 };
