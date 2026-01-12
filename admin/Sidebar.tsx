@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/popover"
 import { format } from 'date-fns';
 import { PageType } from '@/lib/page.types';
+import { JOB_CATEGORIES } from '@/lib/constants';
 
 interface SidebarProps {
   isVisible: boolean;
@@ -40,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
       <Card className="p-5 dark:bg-slate-900">
         <h2 className="block text-xs font-black uppercase text-slate-400 tracking-widest">Page Configurations</h2>
         <div>
-          <label className="block text-xs font-bold text-slate-500 mb-2 tracking-tighter dark:text-slate-400">Page Type</label>
+          <label className="block text-xs font-bold text-slate-500 mb-2 tracking-tighter dark:text-slate-400">Page Type *</label>
           <Select value={page.type} onValueChange={(value) => updateMetadata({ type: value as PageType })}>
             <SelectTrigger className="w-full cursor-pointer dark:bg-slate-800 hover:dark:bg-slate-700">
               <SelectValue placeholder="Select Page Type" />
@@ -55,7 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
           </Select>
         </div>
         <CustomInput
-          label="URL Slug"
+          label="URL Slug *"
           value={page.slug}
           onChange={e => updateMetadata({ slug: e.target.value })}
         />
@@ -66,22 +67,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
         <h2 className="text-xs font-black uppercase text-slate-400 tracking-widest">Post Metadata</h2>
         <div className="space-y-4">
           <CustomInput
-            label="Title"
+            label="Title *"
             value={page.title}
             onChange={e => updateMetadata({ title: e.target.value })}
           />
           <div>
-            <label className="block text-xs font-bold text-slate-500 mb-2 tracking-tighter dark:text-slate-400">Category</label>
+            <label className="block text-xs font-bold text-slate-500 mb-2 tracking-tighter dark:text-slate-400">Category *</label>
             <Select value={page.category} onValueChange={(value) => updateMetadata({ category: value as string })}>
               <SelectTrigger className="w-full cursor-pointer dark:bg-slate-800 hover:dark:bg-slate-700">
                 <SelectValue placeholder="Select Category" />
               </SelectTrigger>
               <SelectContent className=''>
-                <SelectItem value="railway">Railway</SelectItem>
-                <SelectItem value="banking">Banking</SelectItem>
-                <SelectItem value="defence">Defence</SelectItem>
-                <SelectItem value="administration">Administration</SelectItem>
-                <SelectItem value="teaching">Teaching</SelectItem>
+                {
+                  JOB_CATEGORIES.map((category) => (
+                    <SelectItem key={category.key} value={category.key}>
+                      {category.value}
+                    </SelectItem>
+                  ))
+                }
               </SelectContent>
             </Select>
           </div>

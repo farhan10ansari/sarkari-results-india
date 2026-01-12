@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     if (!body.title || !body.slug || !body.type || !body.category) {
       return APIResponse(
         false,
-        'Missing required fields: title, slug, type, and category are required',
+        'Missing required fields: title, slug, type and category are required',
         null,
         400
       );
