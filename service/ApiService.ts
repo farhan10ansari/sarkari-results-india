@@ -1,5 +1,5 @@
 import { APIResponse } from "@/lib/api";
-import { IPage } from "@/lib/page.types";
+import { IPage, PageStatus } from "@/lib/page.types";
 import axios from "axios";
 
 const _axios = axios.create({
@@ -12,4 +12,23 @@ const _axios = axios.create({
 
 export const CreateNewPage = async (page: IPage) => {
     return _axios.post<APIResponse<null>>("/api/admin/pages", page);
+};
+
+export const GetAllPages = async (page: number = 1, limit: number = 10) => {
+    return _axios.get<APIResponse<{ pages: IPage[], pagination: { total: number, page: number, limit: number, totalPages: number, hasMore: boolean } }>>(`/api/admin/pages`, {
+        params: { page, limit }
+    });
+};
+
+export const UpdatePage = async (id: string, data: Partial<IPage>) => {
+    return _axios.patch<APIResponse<IPage>>(`/api/admin/pages/${id}`, data);
+};
+
+export const DeletePage = async (id: string) => {
+    // Soft delete by setting status to TRASHED
+    return UpdatePage(id, { status: PageStatus.TRASHED }); // Assuming PageStatus enum is available or string 'TRASHED'
+};
+
+export const GetDashboardStats = async () => {
+    return _axios.get<APIResponse<{ total: number, published: number, drafts: number }>>('/api/admin/stats');
 };

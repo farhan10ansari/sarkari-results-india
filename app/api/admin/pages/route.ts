@@ -120,31 +120,54 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
     const status = searchParams.get('status');
+    const category = searchParams.get('category');
 
     // Build query
     const query: any = {};
     if (type) query.type = type;
     if (status) query.status = status;
+    if (category) query.category = category;
 
-    // Fetch pages
-    const pages = await Page.find(query).sort({ updatedAt: -1 });
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '10');
+    const skip = (page - 1) * limit;
+
+    // Fetch pages with pagination
+    const pages = await Page.find(query)
+      .select('_id title slug category status updatedAt type')
+      .sort({ updatedAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Page.countDocuments(query);
+    const totalPages = Math.ceil(total / limit);
 
     // Build descriptive message
     let message = 'Pages retrieved successfully';
-    if (type && status) {
-      message = `Retrieved ${pages.length} ${status} ${type} page(s)`;
-    } else if (type) {
-      message = `Retrieved ${pages.length} ${type} page(s)`;
-    } else if (status) {
-      message = `Retrieved ${pages.length} ${status} page(s)`;
+    const filters = [];
+    if (type) filters.push(type);
+    if (status) filters.push(status);
+    if (category) filters.push(category);
+
+    if (filters.length > 0) {
+      message = `Retrieved ${pages.length} page(s) matching: ${filters.join(', ')} (Page ${page} of ${totalPages})`;
     } else {
-      message = `Retrieved ${pages.length} page(s)`;
+      message = `Retrieved ${pages.length} page(s) (Page ${page} of ${totalPages})`;
     }
 
     return APIResponse(
       true,
       message,
-      { pages, count: pages.length },
+      {
+        pages,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages,
+          hasMore: page < totalPages
+        }
+      },
       200
     );
   } catch (error: any) {

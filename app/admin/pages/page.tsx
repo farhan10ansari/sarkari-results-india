@@ -2,19 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
-    PlusCircle,
-    FileText,
-    BarChart3,
-    Clock,
-    CheckCircle2,
-    Search,
-    ArrowRight,
+    ChevronLeft,
+    ChevronRight,
     Loader2,
     Trash,
-    Pencil
+    Pencil,
+    FileText,
+    ArrowLeft
 } from 'lucide-react';
 import Link from 'next/link';
-import { GetAllPages, UpdatePage, DeletePage, GetDashboardStats } from '@/service/ApiService';
+import { GetAllPages, UpdatePage, DeletePage } from '@/service/ApiService';
 import { IPage, PageStatus } from '@/lib/page.types';
 import {
     Table,
@@ -34,41 +31,37 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { format } from 'date-fns';
 import { toast } from 'sonner';
-
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 
-const DashboardHome: React.FC = () => {
+export default function AllPages() {
     const [pages, setPages] = useState<IPage[]>([]);
     const [loading, setLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const [stats, setStats] = useState({ total: 0, published: 0, drafts: 0 });
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const LIMIT = 15;
+
     const [deleteId, setDeleteId] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const fetchData = async () => {
+    const fetchPages = async () => {
+        // If we have no pages, this is likely the first load, so show full loader
         if (pages.length === 0) {
             setLoading(true);
         } else {
+            // Otherwise, we are refreshing data, show refresh indicator
             setIsRefreshing(true);
         }
 
         try {
-            // Fetch stats and top 5 pages in parallel
-            const [statsRes, pagesRes] = await Promise.all([
-                GetDashboardStats(),
-                GetAllPages(1, 5)
-            ]);
-
-            if (statsRes.data.success && statsRes.data.data) {
-                setStats(statsRes.data.data);
-            }
-
-            if (pagesRes.data.success && pagesRes.data.data) {
-                setPages(pagesRes.data.data.pages);
+            const res = await GetAllPages(page, LIMIT);
+            if (res.data.success && res.data.data) {
+                setPages(res.data.data.pages);
+                setTotalPages(res.data.data.pagination.totalPages);
             }
         } catch (e) {
-            console.error("Failed to fetch data", e);
-            toast.error("Failed to load dashboard data");
+            console.error("Failed to fetch pages", e);
+            toast.error("Failed to load pages");
         } finally {
             setLoading(false);
             setIsRefreshing(false);
@@ -76,16 +69,23 @@ const DashboardHome: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        fetchPages();
+    }, [page]);
 
+    const handlePrevious = () => {
+        if (page > 1) setPage(p => p - 1);
+    };
+
+    const handleNext = () => {
+        if (page < totalPages) setPage(p => p + 1);
+    };
 
     const handleStatusChange = async (id: string, newStatus: PageStatus) => {
         try {
             const res = await UpdatePage(id, { status: newStatus });
             if (res.data.success) {
                 toast.success(`Status updated to ${newStatus}`);
-                fetchData();
+                fetchPages();
             } else {
                 toast.error(res.data.message || "Failed to update status");
             }
@@ -105,7 +105,7 @@ const DashboardHome: React.FC = () => {
             const res = await DeletePage(deleteId);
             if (res.data.success) {
                 toast.success("Page moved to trash");
-                fetchData();
+                fetchPages();
             } else {
                 toast.error(res.data.message || "Failed to delete page");
             }
@@ -118,114 +118,50 @@ const DashboardHome: React.FC = () => {
     };
 
     return (
-        <div className="max-w-6xl mx-5 xl:mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-y-auto px-1 pb-10">
-            {/* Hero Section */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-8">
+        <div className="w-full max-w-[95%] xl:max-w-[1800px] mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-y-auto px-4 py-8">
+            <div className="flex items-center gap-4">
+                <Button variant="outline" size="icon" asChild>
+                    <Link href="/admin">
+                        <ArrowLeft className="h-4 w-4" />
+                    </Link>
+                </Button>
                 <div>
-                    <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
-                        Welcome back, Admin
+                    <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+                        All Pages
                     </h2>
                     <p className="text-slate-500 dark:text-slate-400 font-medium">
-                        Manage your government job postings and notifications from one place.
+                        Manage all your pages types, status and content.
                     </p>
-                </div>
-                <div className="flex items-center gap-3 w-full md:w-auto">
-                    <div className="relative flex-1 md:w-64">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                        <input
-                            type="text"
-                            placeholder="Search posts..."
-                            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white dark:bg-slate-800 dark:border-slate-700 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-                        />
-                    </div>
                 </div>
             </div>
 
-            {/* Main Actions Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                {/* Create New Card (Primary) */}
-                <Link
-                    href="/admin/create-page"
-                    className="group relative overflow-hidden bg-blue-600 rounded-3xl p-8 text-left shadow-xl shadow-blue-900/20 hover:shadow-2xl hover:shadow-blue-900/30 transition-all hover:-translate-y-1 cursor-pointer block"
-                >
-                    <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <PlusCircle size={120} />
-                    </div>
-                    <div className="relative z-10 flex flex-col h-full justify-between">
-                        <div className="bg-white/20 w-12 h-12 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-sm">
-                            <PlusCircle className="text-white" size={24} />
-                        </div>
-                        <div>
-                            <h3 className="text-2xl font-bold text-white mb-2">Create Job Post</h3>
-                            <p className="text-blue-100 text-sm font-medium mb-6">
-                                Start a new government job notification from scratch or use AI to extract data.
-                            </p>
-                            <span className="inline-flex items-center text-white font-bold text-sm bg-white/20 px-4 py-2 rounded-lg backdrop-blur-md group-hover:bg-white group-hover:text-blue-600 transition-colors">
-                                Start Editor <ArrowRight size={16} className="ml-2" />
-                            </span>
-                        </div>
-                    </div>
-                </Link>
-
-                {/* Manage Posts Card */}
-                <Link href="/admin/pages" className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-slate-300 dark:hover:border-slate-700 transition-all group cursor-pointer block">
-                    <div className="bg-slate-100 dark:bg-slate-800 w-12 h-12 rounded-2xl flex items-center justify-center mb-6 text-slate-600 dark:text-slate-300 group-hover:bg-blue-50 group-hover:text-blue-600 dark:group-hover:bg-blue-900/20 dark:group-hover:text-blue-400 transition-colors">
-                        <FileText size={24} />
-                    </div>
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">All Pages</h3>
-                    <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">
-                        View, edit, or delete existing job posts. Manage status and publication dates.
-                    </p>
-                    <div className="flex items-center gap-4 text-sm font-bold text-slate-400">
-                        <span className="flex items-center"><CheckCircle2 size={14} className="mr-1 text-green-500" /> {stats.published} Published</span>
-                        <span className="flex items-center"><Clock size={14} className="mr-1 text-orange-500" /> {stats.drafts} Drafts</span>
-                    </div>
-                    <div className="mt-4 text-xs text-slate-400 font-medium bg-slate-50 dark:bg-slate-800 rounded-lg px-3 py-2 inline-block">
-                        Total {stats.total} Pages (Excluding Trash)
-                    </div>
-                </Link>
-
-                {/* Analytics/Settings Card */}
-                <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-slate-300 dark:hover:border-slate-700 transition-all group cursor-pointer">
-                    <div className="bg-slate-100 dark:bg-slate-800 w-12 h-12 rounded-2xl flex items-center justify-center mb-6 text-slate-600 dark:text-slate-300 group-hover:bg-purple-50 group-hover:text-purple-600 dark:group-hover:bg-purple-900/20 dark:group-hover:text-purple-400 transition-colors">
-                        <BarChart3 size={24} />
-                    </div>
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Analytics</h3>
-                    <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">
-                        Check visitor stats, click-through rates, and engagement on your job posts.
-                    </p>
-                    <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
-                        <div className="bg-purple-500 h-full w-2/3"></div>
-                    </div>
-                    <p className="text-xs text-slate-400 mt-2 font-bold uppercase tracking-wider">Weekly Goal: 65%</p>
-                </div>
-            </div>
-
-            {/* Recent Activity Table */}
             <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
                 <div className="px-8 py-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <h3 className="font-bold text-lg text-slate-900 dark:text-white">Recent Activity</h3>
-                        {isRefreshing && <Loader2 className="h-4 w-4 animate-spin text-slate-400" />}
+                    <div className="flex items-center gap-2">
+                        <h3 className="font-bold text-lg text-slate-900 dark:text-white">Page List</h3>
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+                            Page {page} of {totalPages}
+                        </span>
                     </div>
-                    <Button variant="ghost" size="sm" asChild className='cursor-pointer'>
-                        <Link href="/admin/pages">View All</Link>
+
+                    <Button variant="ghost" size="sm" onClick={fetchPages} disabled={loading || isRefreshing}>
+                        {isRefreshing ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                        Refresh
                     </Button>
                 </div>
 
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto w-full">
                     {loading ? (
-                        <div className="flex items-center justify-center h-48 text-slate-400 gap-2">
+                        <div className="flex items-center justify-center h-64 text-slate-400 gap-2">
                             <Loader2 className="animate-spin" /> Loading pages...
                         </div>
                     ) : pages.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-48 text-slate-500">
+                        <div className="flex flex-col items-center justify-center h-64 text-slate-500">
                             <FileText size={48} className="mb-4 opacity-20" />
                             <p>No pages found</p>
                         </div>
                     ) : (
-                        <Table>
+                        <Table className="min-w-[1000px]">
                             <TableHeader className="bg-slate-50 dark:bg-slate-800/50">
                                 <TableRow>
                                     <TableHead className="px-8 py-4 font-bold text-slate-500 uppercase text-xs">Job Title</TableHead>
@@ -304,6 +240,33 @@ const DashboardHome: React.FC = () => {
                         </Table>
                     )}
                 </div>
+
+                {/* Pagination Controls */}
+                <div className="px-8 py-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-900/50">
+                    <div className="text-xs text-slate-500 font-medium">
+                        Page {page} of {totalPages}
+                    </div>
+                    <div className="flex gap-2">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handlePrevious}
+                            disabled={page <= 1 || loading || isRefreshing}
+                            className="bg-white dark:bg-slate-800"
+                        >
+                            <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleNext}
+                            disabled={page >= totalPages || loading || isRefreshing}
+                            className="bg-white dark:bg-slate-800"
+                        >
+                            <ChevronRight className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </div>
             </div>
 
             <ConfirmationDialog
@@ -318,6 +281,4 @@ const DashboardHome: React.FC = () => {
             />
         </div>
     );
-};
-
-export default DashboardHome;
+}
