@@ -1,5 +1,6 @@
 'use client'
 
+import React, { useEffect, Suspense } from 'react';
 import AiDialog from "@/admin/components/AiDialog";
 import JsonDialog from "@/admin/components/JsonDialog";
 import SubmitDialog from "@/admin/components/SubmitDialog";
@@ -8,11 +9,40 @@ import PreviewMode from "@/admin/PreviewMode";
 import { Sidebar } from "@/admin/Sidebar";
 import { usePageStore, ViewMode } from "@/admin/usePageStore";
 import { Eye, PenLine } from "lucide-react";
+import { useSearchParams } from 'next/navigation';
+import { GetPageById } from '@/service/ApiService';
+import { toast } from 'sonner';
 
-export default function AdminPage() {
+function AdminPageContent() {
     const viewMode = usePageStore((state) => state.viewMode);
     const setViewMode = usePageStore((state) => state.setViewMode);
     const page = usePageStore((state) => state.page);
+    const setPage = usePageStore((state) => state.setPage);
+    const resetPage = usePageStore((state) => state.resetPage);
+
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
+
+    useEffect(() => {
+        if (id) {
+            const fetchPage = async () => {
+                try {
+                    const res = await GetPageById(id);
+                    if (res.data.success && res.data.data) {
+                        setPage(res.data.data);
+                    } else {
+                        toast.error("Failed to fetch page");
+                    }
+                } catch (e) {
+                    console.error(e);
+                    toast.error("Error loading page");
+                }
+            };
+            fetchPage();
+        } else {
+            resetPage();
+        }
+    }, [id, setPage, resetPage]);
 
     return (
         <div className="flex-1 flex flex-col overflow-y-auto">
@@ -57,8 +87,14 @@ export default function AdminPage() {
                     )}
                 </div>
             </div>
-
-
         </div>
+    );
+}
+
+export default function AdminPage() {
+    return (
+        <Suspense fallback={<div>Loading editor...</div>}>
+            <AdminPageContent />
+        </Suspense>
     );
 }

@@ -10,6 +10,31 @@ type Props = {
     }>;
 };
 
+// GET - Fetch page by ID
+export async function GET(request: NextRequest, props: Props) {
+    try {
+        const params = await props.params;
+        await dbConnect();
+        const { id } = params;
+
+        if (!id) {
+            return APIResponse(false, 'Page ID is required', null, 400);
+        }
+
+        const page = await Page.findById(id);
+
+        if (!page) {
+            return APIResponse(false, 'Page not found', null, 404);
+        }
+
+        return APIResponse(true, 'Page retrieved successfully', page, 200);
+
+    } catch (error: any) {
+        console.error('Error fetching page:', error);
+        return APIResponse(false, error.message || 'Error fetching page', null, 500);
+    }
+}
+
 // PATCH - Update a page (e.g. status change, soft delete)
 export async function PATCH(request: NextRequest, props: Props) {
     try {

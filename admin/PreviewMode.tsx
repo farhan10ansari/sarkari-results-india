@@ -1,9 +1,9 @@
 import { PreviewSection } from "./PreviewSection";
 import { Calendar } from "lucide-react";
-import { IPage } from "@/lib/page.types";
+import { IPageWithoutId } from "@/lib/page.types";
 
 type Props = {
-    page: IPage;
+    page: IPageWithoutId;
 };
 
 export default function PreviewMode({ page }: Props) {

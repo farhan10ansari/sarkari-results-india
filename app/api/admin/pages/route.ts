@@ -25,14 +25,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if page with same _id already exists
-    const existingPageById = await Page.findById(body._id);
-    if (existingPageById) {
-      return APIResponse(
-        false,
-        `Page with _id '${body._id}' already exists`,
-        null,
-        409
-      );
+    if (body._id) {
+      const existingPageById = await Page.findById(body._id);
+      if (existingPageById) {
+        return APIResponse(
+          false,
+          `Page with _id '${body._id}' already exists`,
+          null,
+          409
+        );
+      }
     }
 
     // Check if page with same slug already exists
@@ -49,6 +51,7 @@ export async function POST(request: NextRequest) {
     // Prepare page data with defaults
     const pageData = {
       ...body,
+      _id: body?._id || crypto.randomUUID(),
       status: body.status || PageStatus.DRAFT,
       displayConfig: body.displayConfig || {},
       metadata: body.metadata || {},

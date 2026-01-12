@@ -1,5 +1,5 @@
 import { APIResponse } from "@/lib/api";
-import { IPage, PageStatus } from "@/lib/page.types";
+import { IPage, IPageWithoutId, PageStatus } from "@/lib/page.types";
 import axios from "axios";
 
 const _axios = axios.create({
@@ -10,8 +10,8 @@ const _axios = axios.create({
 });
 
 
-export const CreateNewPage = async (page: IPage) => {
-    return _axios.post<APIResponse<null>>("/api/admin/pages", page);
+export const CreateNewPage = async (page: IPageWithoutId) => {
+    return _axios.post<APIResponse<IPage>>("/api/admin/pages", page);
 };
 
 export const GetAllPages = async (page: number = 1, limit: number = 10) => {
@@ -20,7 +20,11 @@ export const GetAllPages = async (page: number = 1, limit: number = 10) => {
     });
 };
 
-export const UpdatePage = async (id: string, data: Partial<IPage>) => {
+export const GetPageById = async (id: string) => {
+    return _axios.get<APIResponse<IPage>>(`/api/admin/pages/${id}`);
+};
+
+export const UpdatePage = async (id: string, data: Partial<IPageWithoutId>) => {
     return _axios.patch<APIResponse<IPage>>(`/api/admin/pages/${id}`, data);
 };
 

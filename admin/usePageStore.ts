@@ -1,4 +1,4 @@
-import { FieldType, IField, IFieldWithoutSubSection, IPage, ISection, ISubSectionField, PageType, SectionType } from '@/lib/page.types';
+import { FieldType, IField, IFieldWithoutSubSection, IPage, IPageWithoutId, ISection, ISubSectionField, PageType, SectionType } from '@/lib/page.types';
 import { create } from 'zustand';
 
 export enum ViewMode {
@@ -6,16 +6,17 @@ export enum ViewMode {
   PREVIEW = 'preview'
 }
 
+
 interface PageState {
   //view mode
   viewMode: ViewMode;
   setViewMode: (viewMode: ViewMode) => void;
 
   //page
-  page: IPage;
+  page: IPageWithoutId;
   // Metadata
-  setPage: (page: IPage) => void;
-  updateMetadata: (updates: Partial<IPage>) => void;
+  setPage: (page: IPageWithoutId) => void;
+  updateMetadata: (updates: Partial<IPageWithoutId>) => void;
 
   // Sections
   addSection: () => void;
@@ -37,9 +38,8 @@ interface PageState {
   resetPage: () => void;
 }
 
-function getInitialPage(): IPage {
+function getInitialPage(): IPageWithoutId {
   return {
-    _id: crypto.randomUUID(),
     title: '',
     slug: '',
     description: '',

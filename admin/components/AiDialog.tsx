@@ -28,7 +28,7 @@ export default function AiDialog() {
         setLoading(true);
         try {
             const data = await parsePageDescriptionWithAI(aiInput);
-            setPage({ ...data, id: page._id, updatedAt: new Date().toISOString() } as any);
+            setPage({ ...data, updatedAt: new Date().toISOString() } as any);
             setIsModalOpen(false)
         } catch (e) { alert("Failed to extract data."); }
         setLoading(false);

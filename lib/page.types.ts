@@ -122,3 +122,6 @@ export interface IPage {
 
     sections: ISection[]; // Sections of the Page
 }
+
+
+export type IPageWithoutId = Omit<IPage, '_id'>;

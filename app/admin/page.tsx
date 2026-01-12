@@ -146,7 +146,7 @@ const DashboardHome: React.FC = () => {
 
                 {/* Create New Card (Primary) */}
                 <Link
-                    href="/admin/create-page"
+                    href="/admin/page-editor"
                     className="group relative overflow-hidden bg-blue-600 rounded-3xl p-8 text-left shadow-xl shadow-blue-900/20 hover:shadow-2xl hover:shadow-blue-900/30 transition-all hover:-translate-y-1 cursor-pointer block"
                 >
                     <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -286,13 +286,13 @@ const DashboardHome: React.FC = () => {
                                         <TableCell className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
                                                 <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-blue-600 cursor-pointer" asChild>
-                                                    <Link href={`/admin/create-page?id=${pageItem._id}`}><Pencil className="h-4 w-4" /></Link>
+                                                    <Link href={`/admin/page-editor?id=${pageItem._id || ''}`}><Pencil className="h-4 w-4" /></Link>
                                                 </Button>
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
                                                     className="h-8 w-8 text-slate-500 hover:text-red-600 cursor-pointer"
-                                                    onClick={() => handleDeleteClick(pageItem._id)}
+                                                    onClick={() => pageItem._id && handleDeleteClick(pageItem._id)}
                                                 >
                                                     <Trash className="h-4 w-4" />
                                                 </Button>

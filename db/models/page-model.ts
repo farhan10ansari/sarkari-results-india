@@ -12,6 +12,7 @@ const PageSchema = new Schema<IPage>(
       type: String,
       required: true,
       unique: true,
+      default: () => crypto.randomUUID(),
     },
     title: {
       type: String,
