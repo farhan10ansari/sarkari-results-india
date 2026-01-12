@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import dbConnect from '@/db/mongodb';
-import Page from '@/db/models/page';
+import Page from '@/db/models/page-model';
 import { IPage } from '@/lib/page.types';
 import PreviewMode from '@/admin/PreviewMode';
 

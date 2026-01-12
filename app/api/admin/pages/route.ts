@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/db/mongodb';
-import Page from '@/db/models/page';
+import Page from '@/db/models/page-model';
 import { IPage, PageStatus } from '@/lib/page.types';
 import { APIResponse } from '@/lib/api';
 
