@@ -52,7 +52,12 @@ export default function JsonDialog() {
 
     const isValidJson = useMemo(() => {
         try {
-            JSON.parse(jsonText);
+            const parsed = JSON.parse(jsonText);
+            const validationError = validatePageSchema(parsed);
+            if (validationError) {
+                setError(validationError);
+                return false;
+            }
             return true;
         } catch (err: any) {
             setError(err.message);
@@ -226,4 +231,106 @@ export default function JsonDialog() {
             />
         </>
     );
+}
+
+// --- Validation Helpers ---
+
+function hasUnknownKeys(obj: any, allowedKeys: string[], path: string): string | null {
+    if (typeof obj !== 'object' || obj === null) return null; // Let other checks handle non-objects if needed
+    const objKeys = Object.keys(obj);
+    const allowedSet = new Set(allowedKeys);
+    for (const key of objKeys) {
+        if (!allowedSet.has(key)) {
+            return `Error at ${path}: Unknown key "${key}"`;
+        }
+    }
+    return null;
+}
+
+function validateField(field: any, path: string): string | null {
+    if (typeof field !== 'object' || field === null) return `Error at ${path}: Must be an object`;
+    if (!field.type) return `Error at ${path}: Missing "type" field`;
+
+    const commonKeys = ["_id", "type"];
+    let specificKeys: string[] = [];
+
+    switch (field.type) {
+        case "KEY_VALUE":
+            specificKeys = ["key", "value"];
+            break;
+        case "TABLE":
+            specificKeys = ["tableData"];
+            if (field.tableData) {
+                const tdErr = hasUnknownKeys(field.tableData, ["columns", "rows"], `${path}.tableData`);
+                if (tdErr) return tdErr;
+            }
+            break;
+        case "MARKDOWN":
+            specificKeys = ["value"];
+            break;
+        case "LINK":
+            specificKeys = ["key", "value"];
+            break;
+        case "DATE":
+            specificKeys = ["key", "value"];
+            break;
+        case "SUB_SECTION":
+            specificKeys = ["title", "children"];
+            if (Array.isArray(field.children)) {
+                for (let i = 0; i < field.children.length; i++) {
+                    const child = field.children[i];
+                    if (child.type === "SUB_SECTION") {
+                        return `Error at ${path}.children[${i}]: Nested Sub-Sections are not allowed`;
+                    }
+                    const err = validateField(child, `${path}.children[${i}]`);
+                    if (err) return err;
+                }
+            }
+            break;
+        default:
+            return `Error at ${path}: Unknown Field Type "${field.type}"`;
+    }
+
+    return hasUnknownKeys(field, [...commonKeys, ...specificKeys], path);
+}
+
+function validateSection(section: any, path: string): string | null {
+    if (typeof section !== 'object' || section === null) return `Error at ${path}: Must be an object`;
+    const allowed = ["_id", "title", "type", "children"];
+    const keyErr = hasUnknownKeys(section, allowed, path);
+    if (keyErr) return keyErr;
+
+    if (Array.isArray(section.children)) {
+        for (let i = 0; i < section.children.length; i++) {
+            const err = validateField(section.children[i], `${path}.children[${i}]`);
+            if (err) return err;
+        }
+    }
+    return null;
+}
+
+function validatePageSchema(page: any): string | null {
+    if (typeof page !== 'object' || page === null) return "Root must be an object";
+
+    const allowed = [
+        "schemaVersion", "_id", "title", "slug", "description",
+        "publishedAt", "updatedAt", "type", "status",
+        "displayConfig", "metadata", "category", "importantDates", "sections"
+    ];
+
+    const keyErr = hasUnknownKeys(page, allowed, "Page");
+    if (keyErr) return keyErr;
+
+    if (page.importantDates) {
+        const idErr = hasUnknownKeys(page.importantDates, ["startDateOfApplication", "lastDateOfApplication"], "Page.importantDates");
+        if (idErr) return idErr;
+    }
+
+    if (Array.isArray(page.sections)) {
+        for (let i = 0; i < page.sections.length; i++) {
+            const err = validateSection(page.sections[i], `Page.sections[${i}]`);
+            if (err) return err;
+        }
+    }
+    return null;
 }
