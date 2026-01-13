@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { IFieldWithoutSubSection } from '@/lib/page.types';
 import { GripVertical, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface BlockWrapperProps {
   block: IFieldWithoutSubSection;
@@ -42,9 +43,9 @@ export const BlockWrapper: React.FC<BlockWrapperProps> = ({
           </span>
         </div>
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button type="button" onClick={onMoveUp} disabled={isFirst} className="p-1 text-slate-400 hover:text-blue-600 disabled:opacity-20 dark:text-slate-500 dark:hover:text-blue-400 cursor-pointer"><ArrowUp size={12} /></button>
-          <button type="button" onClick={onMoveDown} disabled={isLast} className="p-1 text-slate-400 hover:text-blue-600 disabled:opacity-20 dark:text-slate-500 dark:hover:text-blue-400 cursor-pointer"><ArrowDown size={12} /></button>
-          <button type="button" onClick={onDelete} className="p-1 text-slate-300 hover:text-red-500 dark:text-slate-600 dark:hover:text-red-400 cursor-pointer"><Trash2 size={12} /></button>
+          <Button type="button" onClick={onMoveUp} disabled={isFirst} variant="ghost" size="icon-sm" className="h-6 w-6 text-slate-400 hover:text-blue-600 disabled:opacity-20 dark:text-slate-500 dark:hover:text-blue-400"><ArrowUp size={12} /></Button>
+          <Button type="button" onClick={onMoveDown} disabled={isLast} variant="ghost" size="icon-sm" className="h-6 w-6 text-slate-400 hover:text-blue-600 disabled:opacity-20 dark:text-slate-500 dark:hover:text-blue-400"><ArrowDown size={12} /></Button>
+          <Button type="button" onClick={onDelete} variant="ghost" size="icon-sm" className="h-6 w-6 text-slate-300 hover:text-red-500 dark:text-slate-600 dark:hover:text-red-400"><Trash2 size={12} /></Button>
         </div>
       </div>
       <div className="p-3">

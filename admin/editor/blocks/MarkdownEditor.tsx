@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IMarkdownField } from '@/lib/page.types';
 import { Eye, Edit2 } from 'lucide-react';
 import { MarkdownRenderer } from '@/components/MarkdownRenderer';
+import { Button } from '@/components/ui/button';
 
 interface MarkdownEditorProps {
   block: IMarkdownField;
@@ -14,13 +15,15 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ block, onChange 
   return (
     <div className="w-full">
       <div className="flex justify-end mb-2">
-        <button
+        <Button
           type="button"
           onClick={() => setIsPreview(!isPreview)}
-          className="text-[10px] flex items-center gap-1 text-blue-600 font-bold uppercase tracking-wider cursor-pointer"
+          variant="ghost"
+          size="sm"
+          className="h-6 text-[10px] gap-1 text-blue-600 font-bold uppercase tracking-wider hover:bg-blue-50 dark:hover:bg-blue-900/20"
         >
           {isPreview ? <><Edit2 size={10} /> Edit</> : <><Eye size={10} /> Preview</>}
-        </button>
+        </Button>
       </div>
       {isPreview ? (
         <div className="p-3 border rounded-md bg-slate-50 dark:bg-slate-800 min-h-[100px]">

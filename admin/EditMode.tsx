@@ -27,6 +27,8 @@ export default function EditMode() {
                         if (draggedSectionIndex !== null) reorderSections(draggedSectionIndex, index);
                         setDraggedSectionIndex(null);
                     }}
+                    isFirst={index === 0}
+                    isLast={index === page.sections.length - 1}
                 />
             ))}
         </div>

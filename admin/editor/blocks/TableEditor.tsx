@@ -82,14 +82,16 @@ export const TableEditor: React.FC<TableEditorProps> = ({ block, onChange }) => 
           {data.columns.map(col => (
             <div key={col} className="flex items-center gap-1.5 pl-2.5 pr-1 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-full shadow-sm text-xs font-medium text-slate-700 dark:text-slate-200">
               {col}
-              <button
+              <Button
                 type="button"
                 onClick={() => removeColumn(col)}
-                className="p-0.5 rounded-full hover:bg-red-100 text-slate-400 hover:text-red-600 dark:hover:bg-red-900/30 dark:text-slate-500 dark:hover:text-red-400 transition-colors cursor-pointer"
+                variant="ghost"
+                size="icon-sm"
+                className="h-5 w-5 p-0.5 rounded-full hover:bg-red-100 text-slate-400 hover:text-red-600 dark:hover:bg-red-900/30 dark:text-slate-500 dark:hover:text-red-400"
                 title={`Delete ${col} column`}
               >
                 <X size={12} />
-              </button>
+              </Button>
             </div>
           ))}
           {data.columns.length === 0 && <span className="text-xs text-slate-400 italic">No columns defined</span>}
@@ -144,14 +146,16 @@ export const TableEditor: React.FC<TableEditorProps> = ({ block, onChange }) => 
                     </td>
                   ))}
                   <td className="p-1.5 text-center">
-                    <button
+                    <Button
                       type="button"
                       onClick={() => removeRow(rIdx)}
-                      className="p-1.5 rounded text-slate-300 hover:text-red-500 hover:bg-red-50 dark:text-slate-600 dark:hover:text-red-400 dark:hover:bg-red-900/20 transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
+                      variant="ghost"
+                      size="icon-sm"
+                      className="h-7 w-7 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:text-slate-600 dark:hover:text-red-400 dark:hover:bg-red-900/20 opacity-0 group-hover:opacity-100"
                       title="Remove row"
                     >
                       <Trash2 size={14} />
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}

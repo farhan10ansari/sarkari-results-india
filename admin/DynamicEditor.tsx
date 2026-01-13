@@ -13,6 +13,8 @@ interface DynamicEditorProps {
   onDragStart: (e: React.DragEvent) => void;
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent) => void;
+  isFirst?: boolean;
+  isLast?: boolean;
 }
 
 export const DynamicEditor: React.FC<DynamicEditorProps> = ({
@@ -21,7 +23,9 @@ export const DynamicEditor: React.FC<DynamicEditorProps> = ({
   onMoveDown,
   onDragStart,
   onDragOver,
-  onDrop
+  onDrop,
+  isFirst = false,
+  isLast = false
 }) => {
   const {
     updateSection, deleteSection, addSubSection,
@@ -91,9 +95,9 @@ export const DynamicEditor: React.FC<DynamicEditorProps> = ({
             onMouseEnter={() => setCanDragSection(true)}
             onMouseLeave={() => setCanDragSection(false)}
           ><GripVertical size={16} /></div>
-          <button type="button" onClick={() => setIsExpanded(!isExpanded)} className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 cursor-pointer">
+          <Button type="button" onClick={() => setIsExpanded(!isExpanded)} variant="ghost" size="icon-sm" className="h-7 w-7 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
             {isExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
-          </button>
+          </Button>
           <input
             value={section.title}
             onChange={(e) => updateSection(section._id, e.target.value)}
@@ -103,9 +107,9 @@ export const DynamicEditor: React.FC<DynamicEditorProps> = ({
           />
         </div>
         <div className="flex items-center gap-1">
-          <button type="button" onClick={onMoveUp} className="p-1.5 text-slate-500 hover:bg-slate-200 rounded dark:text-slate-400 dark:hover:bg-slate-800 cursor-pointer"><ArrowUp size={16} /></button>
-          <button type="button" onClick={onMoveDown} className="p-1.5 text-slate-500 hover:bg-slate-200 rounded dark:text-slate-400 dark:hover:bg-slate-800 cursor-pointer"><ArrowDown size={16} /></button>
-          <button type="button" onClick={() => deleteSection(section._id)} className="p-1.5 text-red-500 hover:bg-red-50 rounded dark:text-red-400 dark:hover:bg-red-900/20 cursor-pointer"><Trash2 size={16} /></button>
+          <Button type="button" onClick={onMoveUp} disabled={isFirst} variant="ghost" size="icon-sm" className="h-8 w-8 text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-800"><ArrowUp size={16} /></Button>
+          <Button type="button" onClick={onMoveDown} disabled={isLast} variant="ghost" size="icon-sm" className="h-8 w-8 text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-800"><ArrowDown size={16} /></Button>
+          <Button type="button" onClick={() => deleteSection(section._id)} variant="ghost" size="icon-sm" className="h-8 w-8 text-red-500 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"><Trash2 size={16} /></Button>
         </div>
       </div>
 
@@ -142,9 +146,9 @@ export const DynamicEditor: React.FC<DynamicEditorProps> = ({
                       />
                     </div>
                     <div className="flex items-center gap-1">
-                      <button type="button" onClick={() => moveChild(section._id, index, 'up')} disabled={isFirst} className="p-1 text-slate-400 hover:text-blue-600 disabled:opacity-30 dark:text-slate-500 dark:hover:text-blue-400 cursor-pointer"><ArrowUp size={14} /></button>
-                      <button type="button" onClick={() => moveChild(section._id, index, 'down')} disabled={isLast} className="p-1 text-slate-400 hover:text-blue-600 disabled:opacity-30 dark:text-slate-500 dark:hover:text-blue-400 cursor-pointer"><ArrowDown size={14} /></button>
-                      <button type="button" onClick={() => deleteChild(section._id, sub._id)} className="text-slate-300 hover:text-red-500 p-1 dark:text-slate-600 dark:hover:text-red-400 cursor-pointer"><Trash2 size={14} /></button>
+                      <Button type="button" onClick={() => moveChild(section._id, index, 'up')} disabled={isFirst} variant="ghost" size="icon-sm" className="h-7 w-7 text-slate-400 hover:text-blue-600 disabled:opacity-30 dark:text-slate-500 dark:hover:text-blue-400"><ArrowUp size={14} /></Button>
+                      <Button type="button" onClick={() => moveChild(section._id, index, 'down')} disabled={isLast} variant="ghost" size="icon-sm" className="h-7 w-7 text-slate-400 hover:text-blue-600 disabled:opacity-30 dark:text-slate-500 dark:hover:text-blue-400"><ArrowDown size={14} /></Button>
+                      <Button type="button" onClick={() => deleteChild(section._id, sub._id)} variant="ghost" size="icon-sm" className="h-7 w-7 text-slate-300 hover:text-red-500 dark:text-slate-600 dark:hover:text-red-400"><Trash2 size={14} /></Button>
                     </div>
                   </div>
 
