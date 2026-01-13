@@ -25,13 +25,13 @@ const BlockRenderer: React.FC<{ block: IFieldWithoutSubSection }> = ({ block }) 
     case FieldType.DATE:
       return (
         <div className="flex justify-between items-start gap-4 border-b border-slate-200 dark:border-slate-800 pb-2 mb-3">
-          <span className="font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <span className="text-sm sm:text-base font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2">
             {block.type === FieldType.DATE && (
               <Calendar className="w-4 h-4 text-blue-500" />
             )}
             {block.key}
           </span>
-          <span className="text-slate-700 dark:text-slate-300 text-right">
+          <span className="text-sm sm:text-base min-w-1/3 text-slate-700 dark:text-slate-300 text-right">
             {block.value}
           </span>
         </div>
@@ -100,7 +100,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ section }) => {
         </h3>
       </header>
 
-      <div className="p-6 space-y-6">
+      <div className="p-6 px-4 md:px-6 space-y-6">
         {section.children.map(child =>
           child.type === "SUB_SECTION" ? (
             <div key={child._id}>
