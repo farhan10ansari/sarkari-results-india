@@ -26,7 +26,7 @@ export default function PreviewHeader({ category, title, description, importantD
     const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
     return (
-        <div className="bg-slate-800 dark:bg-slate-900 rounded-3xl p-6 md:p-10 text-white mb-10">
+        <div className="bg-slate-800 dark:bg-slate-900 rounded-3xl p-6 md:p-10 text-white mb-4 lg:mb-8">
             {category && (
                 <span className="inline-block mb-4 text-xs uppercase tracking-widest bg-blue-600 px-3 py-1 rounded-full">
                     {category}
@@ -58,7 +58,7 @@ export default function PreviewHeader({ category, title, description, importantD
                         variant="ghost"
                         size="sm"
                         onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-                        className="text-slate-300 hover:text-white hover:bg-slate-700 px-0"
+                        className="text-slate-300 hover:text-white hover:bg-slate-700 px-0 cursor-pointer"
                     >
                         {isDescriptionExpanded ? "Show less" : "Show more"}
                     </Button>
