@@ -2,6 +2,7 @@ import React from "react";
 import { ExternalLink, Calendar, CheckCircle2 } from "lucide-react";
 import { FieldType, IFieldWithoutSubSection, ISection } from "@/lib/page.types";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
+import { cn } from "@/lib/utils";
 
 interface PreviewSectionProps {
   section: ISection;
@@ -74,7 +75,9 @@ const BlockRenderer: React.FC<{ block: IFieldWithoutSubSection }> = ({ block }) 
               {block.tableData.rows.map((row, rIdx) => (
                 <tr key={rIdx} className="border-t border-slate-200 dark:border-slate-800">
                   {block.tableData.columns.map((col, cIdx) => (
-                    <td key={cIdx} className="px-4 py-3">
+                    <td key={cIdx} className={cn("px-4 py-3",{
+                      "text-xs": row[col].length > 10,
+                    })}>
                       {row[col]}
                     </td>
                   ))}

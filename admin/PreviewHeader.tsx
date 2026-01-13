@@ -19,8 +19,8 @@ type Props = {
  * PreviewHeader Component
  * 
  * Displays the page header with category, title, description, and important dates.
- * The description is fully visible on large screens and can be expanded/collapsed
- * on smaller screens with a "more" button.
+ * The description is truncated to 4 lines on smaller screens and 10 lines on larger screens,
+ * with a "Show more" button to expand/collapse the full description.
  */
 export default function PreviewHeader({ category, title, description, importantDates }: Props) {
     const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
@@ -39,23 +39,21 @@ export default function PreviewHeader({ category, title, description, importantD
 
             <div className="relative">
                 <div 
-                    className={`w-full lg:w-full overflow-hidden ${
+                    className={`w-full overflow-hidden ${
                         !isDescriptionExpanded 
-                            ? "line-clamp-4 lg:line-clamp-none" 
+                            ? "line-clamp-4 lg:line-clamp-8" 
                             : ""
                     }`}
                 >
-                    <div className={!isDescriptionExpanded ? "lg:block" : ""}>
-                        <MarkdownRenderer
-                            content={description}
-                            size="sm"
-                            textColor="text-slate-300"
-                            headingColor="text-white"
-                            className="[&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:mb-2 [&_ol]:mb-2 [&_h1]:mb-2 [&_h2]:mb-2 [&_h3]:mb-2 [&_h4]:mb-2 [&_h5]:mb-2 [&_h6]:mb-2"
-                        />
-                    </div>
+                    <MarkdownRenderer
+                        content={description}
+                        size="sm"
+                        textColor="text-slate-300"
+                        headingColor="text-white"
+                        className="[&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:mb-2 [&_ol]:mb-2 [&_h1]:mb-2 [&_h2]:mb-2 [&_h3]:mb-2 [&_h4]:mb-2 [&_h5]:mb-2 [&_h6]:mb-2"
+                    />
                 </div>
-                <div className="lg:hidden mt-2">
+                <div className="mt-2">
                     <Button
                         variant="ghost"
                         size="sm"
