@@ -81,38 +81,38 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   const components: any = {
     // Headings
     h1: ({ ...props }: React.ComponentPropsWithoutRef<'h1'>) => (
-      <h1 className={`text-3xl font-bold mt-6 mb-4 ${headingColor}`} {...props} />
+      <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold mt-6 mb-4 ${headingColor}`} {...props} />
     ),
     h2: ({ ...props }: React.ComponentPropsWithoutRef<'h2'>) => (
-      <h2 className={`text-2xl font-bold mt-5 mb-3 ${headingColor}`} {...props} />
+      <h2 className={`text-lg sm:text-xl md:text-2xl font-bold mt-5 mb-3 ${headingColor}`} {...props} />
     ),
     h3: ({ ...props }: React.ComponentPropsWithoutRef<'h3'>) => (
-      <h3 className={`text-xl font-bold mt-4 mb-2 ${headingColor}`} {...props} />
+      <h3 className={`text-base sm:text-lg md:text-xl font-bold mt-4 mb-2 ${headingColor}`} {...props} />
     ),
     h4: ({ ...props }: React.ComponentPropsWithoutRef<'h4'>) => (
-      <h4 className={`text-lg font-semibold mt-3 mb-2 ${headingColor}`} {...props} />
+      <h4 className={`text-sm sm:text-base md:text-lg font-semibold mt-3 mb-2 ${headingColor}`} {...props} />
     ),
     h5: ({ ...props }: React.ComponentPropsWithoutRef<'h5'>) => (
-      <h5 className={`text-base font-semibold mt-2 mb-2 ${headingColor}`} {...props} />
+      <h5 className={`text-sm sm:text-base font-semibold mt-2 mb-2 ${headingColor}`} {...props} />
     ),
     h6: ({ ...props }: React.ComponentPropsWithoutRef<'h6'>) => (
-      <h6 className={`text-sm font-semibold mt-2 mb-1 ${headingColor}`} {...props} />
+      <h6 className={`text-xs sm:text-sm font-semibold mt-2 mb-1 ${headingColor}`} {...props} />
     ),
     
     // Paragraphs
     p: ({ ...props }: React.ComponentPropsWithoutRef<'p'>) => (
-      <p className={`mb-4 ${textColor}`} {...props} />
+      <p className={`mb-4 ${textColor} ${size === 'sm' ? 'text-sm sm:text-base md:text-lg' : ''}`} {...props} />
     ),
     
     // Lists
     ul: ({ ...props }: React.ComponentPropsWithoutRef<'ul'>) => (
-      <ul className={`list-disc list-inside mb-4 space-y-2 ml-4 ${textColor}`} {...props} />
+      <ul className={`list-disc list-inside mb-4 space-y-2 ml-4 ${textColor} ${size === 'sm' ? 'text-sm sm:text-base md:text-lg' : ''}`} {...props} />
     ),
     ol: ({ ...props }: React.ComponentPropsWithoutRef<'ol'>) => (
-      <ol className={`list-decimal list-inside mb-4 space-y-2 ml-4 ${textColor}`} {...props} />
+      <ol className={`list-decimal list-inside mb-4 space-y-2 ml-4 ${textColor} ${size === 'sm' ? 'text-sm sm:text-base md:text-lg' : ''}`} {...props} />
     ),
     li: ({ ...props }: React.ComponentPropsWithoutRef<'li'>) => (
-      <li className={`${textColor}`} {...props} />
+      <li className={`${textColor} ${size === 'sm' ? 'text-sm sm:text-base md:text-lg' : ''}`} {...props} />
     ),
     
     // Links
