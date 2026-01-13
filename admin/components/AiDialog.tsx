@@ -12,6 +12,7 @@ import { Wand2 } from "lucide-react";
 import { useState } from "react";
 import { parsePageDescriptionWithAI } from "../services/geminiService";
 import { usePageStore } from "../usePageStore";
+import { toast } from "sonner";
 export default function AiDialog() {
     const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -30,7 +31,9 @@ export default function AiDialog() {
             const data = await parsePageDescriptionWithAI(aiInput);
             setPage({ ...data, updatedAt: new Date().toISOString() } as any);
             setIsModalOpen(false)
-        } catch (e) { alert("Failed to extract data."); }
+        } catch (e) { 
+            toast.error("Failed to extract data."); 
+        }
         setLoading(false);
     };
     return (

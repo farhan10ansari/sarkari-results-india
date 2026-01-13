@@ -5,6 +5,7 @@ import { Trash2, GripVertical, ChevronDown, ChevronRight, ArrowUp, ArrowDown, La
 import { BlockEditor } from '@/admin/editor/BlockEditor';
 import { usePageStore } from '@/admin/usePageStore';
 import { FieldType, ISection, ISubSectionField } from '@/lib/page.types';
+import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 
 interface DynamicEditorProps {
   section: ISection;
@@ -37,6 +38,29 @@ export const DynamicEditor: React.FC<DynamicEditorProps> = ({
   const [draggedBlockId, setDraggedBlockId] = useState<string | null>(null);
   const [draggedParentId, setDraggedParentId] = useState<string | null>(null);
   const [canDragSub, setCanDragSub] = useState<Record<string, boolean>>({});
+  
+  const [showDeleteSectionDialog, setShowDeleteSectionDialog] = useState(false);
+  const [subSectionToDelete, setSubSectionToDelete] = useState<string | null>(null);
+
+  const handleDeleteSectionClick = () => {
+    setShowDeleteSectionDialog(true);
+  };
+
+  const handleConfirmDeleteSection = () => {
+    deleteSection(section._id);
+    setShowDeleteSectionDialog(false);
+  };
+
+  const handleDeleteSubSectionClick = (subSectionId: string) => {
+    setSubSectionToDelete(subSectionId);
+  };
+
+  const handleConfirmDeleteSubSection = () => {
+    if (subSectionToDelete) {
+      deleteChild(section._id, subSectionToDelete);
+      setSubSectionToDelete(null);
+    }
+  };
 
   const handleBlockDragStart = (e: React.DragEvent, id: string, parentId: string | 'root') => {
     e.stopPropagation();
@@ -109,7 +133,7 @@ export const DynamicEditor: React.FC<DynamicEditorProps> = ({
         <div className="flex items-center gap-1">
           <Button type="button" onClick={onMoveUp} disabled={isFirst} variant="ghost" size="icon-sm" className="h-8 w-8 text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-800"><ArrowUp size={16} /></Button>
           <Button type="button" onClick={onMoveDown} disabled={isLast} variant="ghost" size="icon-sm" className="h-8 w-8 text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-800"><ArrowDown size={16} /></Button>
-          <Button type="button" onClick={() => deleteSection(section._id)} variant="ghost" size="icon-sm" className="h-8 w-8 text-red-500 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"><Trash2 size={16} /></Button>
+          <Button type="button" onClick={handleDeleteSectionClick} variant="ghost" size="icon-sm" className="h-8 w-8 text-red-500 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"><Trash2 size={16} /></Button>
         </div>
       </div>
 
@@ -148,7 +172,7 @@ export const DynamicEditor: React.FC<DynamicEditorProps> = ({
                     <div className="flex items-center gap-1">
                       <Button type="button" onClick={() => moveChild(section._id, index, 'up')} disabled={isFirst} variant="ghost" size="icon-sm" className="h-7 w-7 text-slate-400 hover:text-blue-600 disabled:opacity-30 dark:text-slate-500 dark:hover:text-blue-400"><ArrowUp size={14} /></Button>
                       <Button type="button" onClick={() => moveChild(section._id, index, 'down')} disabled={isLast} variant="ghost" size="icon-sm" className="h-7 w-7 text-slate-400 hover:text-blue-600 disabled:opacity-30 dark:text-slate-500 dark:hover:text-blue-400"><ArrowDown size={14} /></Button>
-                      <Button type="button" onClick={() => deleteChild(section._id, sub._id)} variant="ghost" size="icon-sm" className="h-7 w-7 text-slate-300 hover:text-red-500 dark:text-slate-600 dark:hover:text-red-400"><Trash2 size={14} /></Button>
+                      <Button type="button" onClick={() => handleDeleteSubSectionClick(sub._id)} variant="ghost" size="icon-sm" className="h-7 w-7 text-slate-300 hover:text-red-500 dark:text-slate-600 dark:hover:text-red-400"><Trash2 size={14} /></Button>
                     </div>
                   </div>
 
@@ -196,6 +220,26 @@ export const DynamicEditor: React.FC<DynamicEditorProps> = ({
           </div>
         </div>
       )}
+
+      <ConfirmationDialog
+        open={showDeleteSectionDialog}
+        onOpenChange={setShowDeleteSectionDialog}
+        title="Delete Section"
+        description={`Are you sure you want to delete "${section.title}"? This will permanently remove the section and all its content including subsections and blocks. This action cannot be undone.`}
+        confirmLabel="Delete Section"
+        variant="destructive"
+        onConfirm={handleConfirmDeleteSection}
+      />
+
+      <ConfirmationDialog
+        open={!!subSectionToDelete}
+        onOpenChange={(open) => !open && setSubSectionToDelete(null)}
+        title="Delete Sub-Section"
+        description="Are you sure you want to delete this sub-section? This will permanently remove the sub-section and all its blocks. This action cannot be undone."
+        confirmLabel="Delete Sub-Section"
+        variant="destructive"
+        onConfirm={handleConfirmDeleteSubSection}
+      />
     </div>
   );
 };

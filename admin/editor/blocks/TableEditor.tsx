@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Trash2, Plus, X, Columns } from 'lucide-react';
 import { ITableData, ITableField } from '@/lib/page.types';
+import { toast } from 'sonner';
 
 interface TableEditorProps {
   block: ITableField;
@@ -17,7 +18,7 @@ export const TableEditor: React.FC<TableEditorProps> = ({ block, onChange }) => 
     if (!name) return;
 
     if (data.columns.some(c => c.toLowerCase() === name.toLowerCase())) {
-      alert("Column name must be unique");
+      toast.error("Column name must be unique");
       return;
     }
 
