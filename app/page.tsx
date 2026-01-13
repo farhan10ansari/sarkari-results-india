@@ -35,7 +35,7 @@ export default function HomePage() {
           </div>
 
           <div className="space-y-8">
-            <section>
+            <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden p-5">
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1173d4]/10">

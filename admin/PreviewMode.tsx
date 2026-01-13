@@ -25,10 +25,7 @@ export default function PreviewMode({ page }: Props) {
 
                 {/* Important Dates */}
                 {page.importantDates && (
-                    <div className="mt-8 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-slate-900/80 backdrop-blur px-6 py-5 shadow-lg">
-                        <h4 className="mb-4 text-sm font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">
-                            Important Dates
-                        </h4>
+                    <div className="mt-8">
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             {page.importantDates.startDateOfApplication && (

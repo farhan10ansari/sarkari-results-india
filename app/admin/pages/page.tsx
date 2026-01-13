@@ -8,7 +8,8 @@ import {
     Trash,
     Pencil,
     FileText,
-    ArrowLeft
+    ArrowLeft,
+    ExternalLink
 } from 'lucide-react';
 import Link from 'next/link';
 import { GetAllPages, UpdatePage, DeletePage, PermanentDeletePage } from '@/service/ApiService';
@@ -255,6 +256,11 @@ export default function AllPages() {
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
+                                                <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-green-600 cursor-pointer" asChild>
+                                                    <Link href={`/page/${pageItem.slug || ''}`} target="_blank">
+                                                        <ExternalLink className="h-4 w-4" />
+                                                    </Link>
+                                                </Button>
                                                 <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-blue-600 cursor-pointer" asChild>
                                                     <Link href={`/admin/page-editor?id=${pageItem._id || ''}`}><Pencil className="h-4 w-4" /></Link>
                                                 </Button>
