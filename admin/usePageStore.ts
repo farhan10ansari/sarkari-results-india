@@ -138,7 +138,7 @@ export const usePageStore = create<PageState>((set) => ({
         newBlock = {
           ...baseField,
           type: FieldType.TABLE,
-          tableData: { columns: ['Item', 'Details'], rows: [{ 'Item': '', 'Details': '' }] }
+          tableData: { columns: [], rows: [] }
         };
         break;
       case FieldType.MARKDOWN:
