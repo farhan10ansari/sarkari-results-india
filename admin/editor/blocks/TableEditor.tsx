@@ -85,7 +85,7 @@ export const TableEditor: React.FC<TableEditorProps> = ({ block, onChange }) => 
               <button
                 type="button"
                 onClick={() => removeColumn(col)}
-                className="p-0.5 rounded-full hover:bg-red-100 text-slate-400 hover:text-red-600 dark:hover:bg-red-900/30 dark:text-slate-500 dark:hover:text-red-400 transition-colors"
+                className="p-0.5 rounded-full hover:bg-red-100 text-slate-400 hover:text-red-600 dark:hover:bg-red-900/30 dark:text-slate-500 dark:hover:text-red-400 transition-colors cursor-pointer"
                 title={`Delete ${col} column`}
               >
                 <X size={12} />
@@ -109,7 +109,7 @@ export const TableEditor: React.FC<TableEditorProps> = ({ block, onChange }) => 
             }}
             onMouseDown={(e) => e.stopPropagation()}
           />
-          <Button type="button" size="sm" variant="secondary" onClick={addColumn} disabled={!newColName.trim()}>
+          <Button type="button" size="sm" variant="secondary" onClick={addColumn} disabled={!newColName.trim()} className="cursor-pointer">
             Add
           </Button>
         </div>
@@ -147,7 +147,7 @@ export const TableEditor: React.FC<TableEditorProps> = ({ block, onChange }) => 
                     <button
                       type="button"
                       onClick={() => removeRow(rIdx)}
-                      className="p-1.5 rounded text-slate-300 hover:text-red-500 hover:bg-red-50 dark:text-slate-600 dark:hover:text-red-400 dark:hover:bg-red-900/20 transition-all opacity-0 group-hover:opacity-100"
+                      className="p-1.5 rounded text-slate-300 hover:text-red-500 hover:bg-red-50 dark:text-slate-600 dark:hover:text-red-400 dark:hover:bg-red-900/20 transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
                       title="Remove row"
                     >
                       <Trash2 size={14} />
@@ -160,7 +160,7 @@ export const TableEditor: React.FC<TableEditorProps> = ({ block, onChange }) => 
                   <td colSpan={data.columns.length + 1} className="p-8 text-center text-slate-400 dark:text-slate-500 italic">
                     <div className="flex flex-col items-center gap-2">
                       <span>Table is empty</span>
-                      <Button type="button" size="sm" variant="outline" onClick={addRow}>Add First Row</Button>
+                      <Button type="button" size="sm" variant="outline" onClick={addRow} className="cursor-pointer">Add First Row</Button>
                     </div>
                   </td>
                 </tr>
@@ -176,7 +176,7 @@ export const TableEditor: React.FC<TableEditorProps> = ({ block, onChange }) => 
           size="sm"
           variant="secondary"
           onClick={addRow}
-          className="w-full border-dashed border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+          className="w-full border-dashed border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
         >
           <Plus size={12} className="mr-1.5" /> Add Row
         </Button>

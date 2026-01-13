@@ -95,7 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
                 <Button
                   variant="outline"
                   // data-empty={!date}
-                  className="w-full dark:bg-slate-800 hover:dark:bg-slate-700 data-[empty=true]:text-muted-foreground justify-start text-left font-normal"
+                  className="w-full dark:bg-slate-800 hover:dark:bg-slate-700 data-[empty=true]:text-muted-foreground justify-start text-left font-normal cursor-pointer"
                 >
                   <CalendarIcon />
                   {page?.importantDates?.startDateOfApplication ? format(page.importantDates.startDateOfApplication, "PPP") : <span>Pick a date</span>}
@@ -116,7 +116,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
                 <Button
                   variant="outline"
                   // data-empty={!date}
-                  className="w-full dark:bg-slate-800 hover:dark:bg-slate-700 data-[empty=true]:text-muted-foreground justify-start text-left font-normal"
+                  className="w-full dark:bg-slate-800 hover:dark:bg-slate-700 data-[empty=true]:text-muted-foreground justify-start text-left font-normal cursor-pointer"
                 >
                   <CalendarIcon />
                   {page?.importantDates?.lastDateOfApplication ? format(page.importantDates.lastDateOfApplication, "PPP") : <span>Pick a date</span>}
@@ -146,7 +146,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
           <h2 className="text-xs font-black uppercase text-slate-400 tracking-widest flex items-center gap-2">
             <List size={14} /> Structure
           </h2>
-          <Button onClick={addSection} size="sm" variant="outline" className="h-6 px-2 text-[9px] font-bold">
+          <Button onClick={addSection} size="sm" variant="outline" className="h-6 px-2 text-[9px] font-bold cursor-pointer">
             + NEW SECTION
           </Button>
         </div>

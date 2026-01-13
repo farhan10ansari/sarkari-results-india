@@ -17,7 +17,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ block, onChange 
         <button
           type="button"
           onClick={() => setIsPreview(!isPreview)}
-          className="text-[10px] flex items-center gap-1 text-blue-600 font-bold uppercase tracking-wider"
+          className="text-[10px] flex items-center gap-1 text-blue-600 font-bold uppercase tracking-wider cursor-pointer"
         >
           {isPreview ? <><Edit2 size={10} /> Edit</> : <><Eye size={10} /> Preview</>}
         </button>

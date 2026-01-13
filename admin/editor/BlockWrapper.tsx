@@ -42,9 +42,9 @@ export const BlockWrapper: React.FC<BlockWrapperProps> = ({
           </span>
         </div>
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button type="button" onClick={onMoveUp} disabled={isFirst} className="p-1 text-slate-400 hover:text-blue-600 disabled:opacity-20 dark:text-slate-500 dark:hover:text-blue-400"><ArrowUp size={12} /></button>
-          <button type="button" onClick={onMoveDown} disabled={isLast} className="p-1 text-slate-400 hover:text-blue-600 disabled:opacity-20 dark:text-slate-500 dark:hover:text-blue-400"><ArrowDown size={12} /></button>
-          <button type="button" onClick={onDelete} className="p-1 text-slate-300 hover:text-red-500 dark:text-slate-600 dark:hover:text-red-400"><Trash2 size={12} /></button>
+          <button type="button" onClick={onMoveUp} disabled={isFirst} className="p-1 text-slate-400 hover:text-blue-600 disabled:opacity-20 dark:text-slate-500 dark:hover:text-blue-400 cursor-pointer"><ArrowUp size={12} /></button>
+          <button type="button" onClick={onMoveDown} disabled={isLast} className="p-1 text-slate-400 hover:text-blue-600 disabled:opacity-20 dark:text-slate-500 dark:hover:text-blue-400 cursor-pointer"><ArrowDown size={12} /></button>
+          <button type="button" onClick={onDelete} className="p-1 text-slate-300 hover:text-red-500 dark:text-slate-600 dark:hover:text-red-400 cursor-pointer"><Trash2 size={12} /></button>
         </div>
       </div>
       <div className="p-3">

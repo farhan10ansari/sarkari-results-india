@@ -39,7 +39,7 @@ export default function AiDialog() {
             <DialogTrigger asChild>
                 <Button
                     variant="outline"
-                    className="sm:inline-flex"
+                    className="sm:inline-flex cursor-pointer"
                 >
                     <Wand2 size={14} className="sm:mr-2 text-purple-600" />
                     <span className="hidden sm:inline">AI Fill</span>
@@ -66,12 +66,14 @@ export default function AiDialog() {
                     <Button
                         variant="ghost"
                         onClick={() => setIsModalOpen(false)}
+                        className="cursor-pointer"
                     >
                         Cancel
                     </Button>
                     <Button
                         onClick={handleAiFill}
                         disabled={loading}
+                        className="cursor-pointer"
                     >
                         {loading ? 'Structuring...' : 'Generate Post'}
                     </Button>

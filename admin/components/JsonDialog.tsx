@@ -116,7 +116,7 @@ export default function JsonDialog() {
         <>
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
-                    <Button variant="secondary">
+                    <Button variant="secondary" className="cursor-pointer">
                         <FileJson className="mr-2 h-4 w-4" />
                         JSON
                     </Button>
@@ -134,6 +134,7 @@ export default function JsonDialog() {
                                 size="sm"
                                 variant={mode === "view" ? "default" : "outline"}
                                 onClick={() => setMode("view")}
+                                className="cursor-pointer"
                             >
                                 <Eye className="h-4 w-4 mr-2" />
                                 Preview
@@ -143,6 +144,7 @@ export default function JsonDialog() {
                                 size="sm"
                                 variant={mode === "edit" ? "default" : "outline"}
                                 onClick={() => setMode("edit")}
+                                className="cursor-pointer"
                             >
                                 <Pencil className="h-4 w-4 mr-2" />
                                 Edit
@@ -177,7 +179,7 @@ export default function JsonDialog() {
                     {/* Footer */}
                     <div className="px-6 py-4 border-t flex justify-between bg-slate-50 dark:bg-slate-900">
                         <div className="flex gap-2">
-                            <Button size="sm" variant="outline" onClick={exportJsonFile}>
+                            <Button size="sm" variant="outline" onClick={exportJsonFile} className="cursor-pointer">
                                 <Download className="h-4 w-4 mr-2" />
                                 Export
                             </Button>
@@ -186,12 +188,13 @@ export default function JsonDialog() {
                                 size="sm"
                                 variant="outline"
                                 onClick={() => fileInputRef.current?.click()}
+                                className="cursor-pointer"
                             >
                                 <Upload className="h-4 w-4 mr-2" />
                                 Import
                             </Button>
 
-                            <Button size="sm" variant="outline" onClick={handleCopy}>
+                            <Button size="sm" variant="outline" onClick={handleCopy} className="cursor-pointer">
                                 {copied ? (
                                     <>
                                         <Check className="h-4 w-4 mr-2" />
@@ -210,7 +213,7 @@ export default function JsonDialog() {
                             size="sm"
                             disabled={!isModified || !isValidJson}
                             onClick={handleApply}
-                            className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-40"
+                            className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-40 cursor-pointer"
                         >
                             Apply JSON
                         </Button>

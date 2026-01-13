@@ -60,7 +60,7 @@ export default function SubmitDialog() {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="default">
+                <Button variant="default" className="cursor-pointer">
                     <Send size={14} className="mr-2" />
                     {isEditMode ? 'Update' : 'Submit'}
                 </Button>
@@ -85,12 +85,14 @@ export default function SubmitDialog() {
                         variant="outline"
                         onClick={() => setIsOpen(false)}
                         disabled={isSubmitting}
+                        className="cursor-pointer"
                     >
                         Cancel
                     </Button>
                     <Button
                         onClick={handleSubmit}
                         disabled={isSubmitting}
+                        className="cursor-pointer"
                     >
                         {isSubmitting ? (
                             <>
