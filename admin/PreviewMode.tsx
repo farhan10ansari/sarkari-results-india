@@ -8,7 +8,7 @@ type Props = {
 
 export default function PreviewMode({ page }: Props) {
     return (
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
+        <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="bg-slate-800 dark:bg-slate-900 rounded-3xl p-10 text-white mb-10">
                 <span className="inline-block mb-4 text-xs uppercase tracking-widest bg-blue-600 px-3 py-1 rounded-full">
