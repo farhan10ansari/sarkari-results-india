@@ -116,9 +116,9 @@ export default function JsonDialog() {
         <>
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
-                    <Button variant="secondary" className="cursor-pointer">
-                        <FileJson className="mr-2 h-4 w-4" />
-                        JSON
+                    <Button variant="secondary" size="icon-sm" className="sm:w-auto sm:px-3">
+                        <FileJson className="h-4 w-4 sm:mr-2" />
+                        <span className="hidden sm:inline">JSON</span>
                     </Button>
                 </DialogTrigger>
 

@@ -1,21 +1,17 @@
 'use client'
 
 import React, { useEffect, Suspense } from 'react';
-import AiDialog from "@/admin/components/AiDialog";
-import JsonDialog from "@/admin/components/JsonDialog";
-import SubmitDialog from "@/admin/components/SubmitDialog";
 import EditMode from "@/admin/EditMode";
 import PreviewMode from "@/admin/PreviewMode";
 import { Sidebar } from "@/admin/Sidebar";
-import { usePageStore, ViewMode } from "@/admin/usePageStore";
-import { Eye, PenLine } from "lucide-react";
+import { usePageStore} from "@/admin/usePageStore";
 import { useSearchParams } from 'next/navigation';
 import { GetPageById } from '@/service/ApiService';
 import { toast } from 'sonner';
+import { EditorActionBar } from '@/admin/components/EditorActionBar';
 
 function AdminPageContent() {
     const viewMode = usePageStore((state) => state.viewMode);
-    const setViewMode = usePageStore((state) => state.setViewMode);
     const page = usePageStore((state) => state.page);
     const setPage = usePageStore((state) => state.setPage);
     const resetPage = usePageStore((state) => state.resetPage);
@@ -50,35 +46,7 @@ function AdminPageContent() {
                 <Sidebar isVisible={viewMode === 'edit'} />
                 <div className={viewMode === 'edit' ? 'lg:col-span-8' : 'lg:col-span-12'}>
                     <div className="ml-auto mr-auto">
-                        <div className="flex justify-between mb-8 max-w-4xl ml-auto mr-auto">
-                            <div className="bg-slate-200 p-1 rounded-xl inline-flex dark:bg-slate-800 border border-slate-300 dark:border-slate-700">
-                                <button
-                                    onClick={() => setViewMode(ViewMode.EDIT)}
-                                    className={`flex items-center px-6 py-1.5 rounded-lg text-sm font-bold transition-all duration-200 ${viewMode === 'edit'
-                                        ? 'bg-white text-blue-600 shadow-sm ring-1 ring-slate-900/5 dark:bg-slate-700 dark:text-blue-400 dark:ring-slate-600'
-                                        : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
-                                        }`}
-                                >
-                                    <PenLine size={16} className="mr-2" />
-                                    Editor
-                                </button>
-                                <button
-                                    onClick={() => setViewMode(ViewMode.PREVIEW)}
-                                    className={`flex items-center px-6 py-1.5 rounded-lg text-sm font-bold transition-all duration-200 ${viewMode === 'preview'
-                                        ? 'bg-white text-blue-600 shadow-sm ring-1 ring-slate-900/5 dark:bg-slate-700 dark:text-blue-400 dark:ring-slate-600'
-                                        : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
-                                        }`}
-                                >
-                                    <Eye size={16} className="mr-2" />
-                                    Preview
-                                </button>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <AiDialog />
-                                <JsonDialog />
-                                <SubmitDialog />
-                            </div>
-                        </div>
+                        <EditorActionBar className='hidden lg:flex'/>
                     </div>
                     {viewMode === 'edit' ? (
                         <EditMode />

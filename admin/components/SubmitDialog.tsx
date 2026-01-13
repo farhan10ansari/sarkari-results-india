@@ -60,9 +60,9 @@ export default function SubmitDialog() {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" className="cursor-pointer">
-                    <Send size={14} className="mr-2" />
-                    {isEditMode ? 'Update' : 'Submit'}
+                    <Button variant="default" size="sm" className="sm:w-auto sm:px-3">
+                    <Send size={14} className="h-4 w-4 sm:mr-2" />
+                    <span className="sm:inline">{isEditMode ? 'Update' : 'Submit'}</span>
                 </Button>
             </DialogTrigger>
 

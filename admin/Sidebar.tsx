@@ -21,6 +21,7 @@ import {
 import { format } from 'date-fns';
 import { PageType } from '@/lib/page.types';
 import { JOB_CATEGORIES } from '@/lib/constants';
+import { EditorActionBar } from './components/EditorActionBar';
 
 interface SidebarProps {
   isVisible: boolean;
@@ -37,6 +38,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
   return (
     <aside className="lg:col-span-4 space-y-6">
       <Link href="/admin" className="text-sm text-blue-500 hover:text-blue-700 mb-4 dark:text-blue-400 flex items-center gap-2"><ArrowLeft /> Back to Admin Page</Link>
+
+      <EditorActionBar className='lg:hidden' />
 
       <Card className="p-5 dark:bg-slate-900">
         <h2 className="block text-xs font-black uppercase text-slate-400 tracking-widest">Page Configurations</h2>

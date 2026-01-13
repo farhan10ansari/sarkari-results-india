@@ -39,9 +39,10 @@ export default function AiDialog() {
             <DialogTrigger asChild>
                 <Button
                     variant="outline"
-                    className="sm:inline-flex cursor-pointer"
+                    size="icon-sm"
+                    className="sm:w-auto sm:px-3 text-purple-600"
                 >
-                    <Wand2 size={14} className="sm:mr-2 text-purple-600" />
+                    <Wand2 size={14} className="sm:mr-2" />
                     <span className="hidden sm:inline">AI Fill</span>
                 </Button>
             </DialogTrigger>
