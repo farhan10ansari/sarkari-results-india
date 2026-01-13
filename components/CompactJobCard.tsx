@@ -1,43 +1,66 @@
 "use client";
 
 import Link from "next/link";
-import { Calendar, MapPin } from "lucide-react";
+import { Calendar, Briefcase } from "lucide-react";
 import { Badge } from "./ui/badge";
 
+/**
+ * CompactJobCard Component
+ * 
+ * A compact card component for displaying job listings in grid layouts.
+ * Features include:
+ * - Consistent card height for uniform grid layout
+ * - Job title and category display
+ * - Active/Closed status badge based on last application date
+ * - Colorful category badges with gradient backgrounds
+ * - Hover effects with scale animation for better interactivity
+ * - Responsive design
+ */
 interface CompactJobCardProps {
   id: string;
   title: string;
-  department: string;
-  location: string;
+  category: string;
   lastDate?: string;
 }
 
 export function CompactJobCard({
   id,
   title,
-  department,
-  location,
+  category,
   lastDate,
 }: CompactJobCardProps) {
   return (
-    <Link href={`/jobs/${id}`}>
-      <div className="group rounded-lg border border-gray-200 bg-white p-3 transition-all hover:border-[#1173d4] hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-[#1173d4]">
-        <h3 className="mb-2 line-clamp-2 text-sm font-semibold text-gray-900 group-hover:text-[#1173d4] dark:text-white dark:group-hover:text-[#1173d4]">
+    <Link href={`/page/${id}`}>
+      <div className="group h-full min-h-[140px] flex flex-col rounded-xl border border-gray-200 bg-gradient-to-br from-white to-gray-50 p-4 transition-all hover:scale-[1.02] hover:border-[#1173d4] hover:shadow-lg dark:border-gray-800 dark:from-gray-900 dark:to-gray-800 dark:hover:border-[#1173d4]">
+        {/* Status Badge */}
+        {lastDate && (
+          <div className="mb-3 flex justify-end">
+            <Badge 
+              variant="secondary" 
+              className={`text-xs font-medium shadow-sm ${
+                new Date(lastDate) > new Date() 
+                  ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white dark:from-green-600 dark:to-emerald-600 border-0" 
+                  : "bg-gradient-to-r from-red-500 to-rose-500 text-white dark:from-red-600 dark:to-rose-600 border-0"
+              }`}
+            >
+              {new Date(lastDate) > new Date() ? "✓ Active" : "✕ Closed"}
+            </Badge>
+          </div>
+        )}
+        
+        {/* Title */}
+        <h3 className="mb-3 line-clamp-2 flex-1 text-base font-bold text-gray-900 group-hover:text-[#1173d4] dark:text-white dark:group-hover:text-[#1173d4] transition-colors">
           {title}
         </h3>
-        <p className="mb-2 line-clamp-1 text-xs text-gray-600 dark:text-gray-400">
-          {department}
-        </p>
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-500">
-            <MapPin className="h-3 w-3" />
-            <span className="truncate">{location}</span>
+        
+        {/* Category Badge */}
+        <div className="flex items-center gap-2 mt-auto">
+          <div className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1.5 dark:from-blue-900/30 dark:to-indigo-900/30">
+            <Briefcase className="h-3.5 w-3.5 text-[#1173d4]" />
+            <span className="text-xs font-semibold text-[#1173d4] dark:text-blue-400">
+              {category}
+            </span>
           </div>
-          {lastDate && (
-            <Badge variant="secondary" className="bg-red-50 text-xs text-red-600 dark:bg-red-900/20 dark:text-red-400">
-              {new Date(lastDate) > new Date() ? "Active" : "Closed"}
-            </Badge>
-          )}
         </div>
       </div>
     </Link>

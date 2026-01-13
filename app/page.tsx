@@ -62,8 +62,7 @@ export default function HomePage() {
                     key={job.id}
                     id={job.id}
                     title={job.title}
-                    department={job.department}
-                    location={job.location}
+                    category={job.department}
                     lastDate={job.lastDate}
                   />
                 ))}

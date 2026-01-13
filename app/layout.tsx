@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/navbar/Navbar";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
+import { QueryProvider } from "@/providers/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,13 +37,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex min-h-screen flex-col">
-            <Navbar />
-            <div className="flex-1 flex flex-col">
-              {children}
+          <QueryProvider>
+            <div className="flex min-h-screen flex-col">
+              <Navbar />
+              <div className="flex-1 flex flex-col">
+                {children}
+              </div>
             </div>
-          </div>
-          <Toaster />
+            <Toaster />
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

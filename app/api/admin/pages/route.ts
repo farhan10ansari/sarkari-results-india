@@ -124,20 +124,30 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type');
     const status = searchParams.get('status');
     const category = searchParams.get('category');
+    const search = searchParams.get('search');
 
     // Build query
     const query: any = {};
     if (type) query.type = type;
     if (status) query.status = status;
     if (category) query.category = category;
+    
+    // Add search functionality
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+        { category: { $regex: search, $options: 'i' } },
+      ];
+    }
 
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
     const skip = (page - 1) * limit;
 
-    // Fetch pages with pagination
+    // Fetch pages with pagination - include importantDates for job cards
     const pages = await Page.find(query)
-      .select('_id title slug category status updatedAt type')
+      .select('_id title slug category status updatedAt type importantDates description')
       .sort({ updatedAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -151,6 +161,7 @@ export async function GET(request: NextRequest) {
     if (type) filters.push(type);
     if (status) filters.push(status);
     if (category) filters.push(category);
+    if (search) filters.push(`search: "${search}"`);
 
     if (filters.length > 0) {
       message = `Retrieved ${pages.length} page(s) matching: ${filters.join(', ')} (Page ${page} of ${totalPages})`;
