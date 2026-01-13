@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import dbConnect from '@/db/mongodb';
 import Page from '@/db/models/page-model';
 import { APIResponse } from '@/lib/api';
-import { PageStatus } from '@/lib/page.types';
 
 type Props = {
     params: Promise<{
@@ -21,7 +20,7 @@ export async function GET(request: NextRequest, props: Props) {
             return APIResponse(false, 'Page ID is required', null, 400);
         }
 
-        const page = await Page.findById(id);
+        const page = await Page.findById(id).select('-createdAt -__v'); // Remove createdAt and __v fields
 
         if (!page) {
             return APIResponse(false, 'Page not found', null, 404);
@@ -56,7 +55,7 @@ export async function PATCH(request: NextRequest, props: Props) {
                 }
             },
             { new: true, runValidators: true }
-        );
+        ).select('-createdAt -__v');
 
         if (!updatedPage) {
             return APIResponse(false, 'Page not found', null, 404);
