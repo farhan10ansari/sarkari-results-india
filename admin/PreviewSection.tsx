@@ -1,7 +1,7 @@
 import React from "react";
-import ReactMarkdown from "react-markdown";
 import { ExternalLink, Calendar, CheckCircle2 } from "lucide-react";
 import { FieldType, IFieldWithoutSubSection, ISection } from "@/lib/page.types";
+import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
 interface PreviewSectionProps {
   section: ISection;
@@ -11,8 +11,13 @@ const BlockRenderer: React.FC<{ block: IFieldWithoutSubSection }> = ({ block }) 
   switch (block.type) {
     case FieldType.MARKDOWN:
       return (
-        <div className="prose prose-sm max-w-none text-slate-800 dark:text-slate-200 prose-headings:dark:text-white mb-4">
-          <ReactMarkdown>{block.value || ""}</ReactMarkdown>
+        <div className="mb-4">
+          <MarkdownRenderer
+            content={block.value || ""}
+            size="sm"
+            textColor="text-slate-800 dark:text-slate-200"
+            headingColor="text-slate-900 dark:text-white"
+          />
         </div>
       );
 

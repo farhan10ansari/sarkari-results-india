@@ -67,10 +67,12 @@ export default function PreviewMode({ page }: Props) {
 
             </div>
 
-            {/* Sections Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Sections Grid - Masonry Layout */}
+            <div className="columns-1 lg:columns-2 gap-8">
                 {page.sections.map(section => (
-                    <PreviewSection key={section._id} section={section} />
+                    <div key={section._id} className="break-inside-avoid mb-8">
+                        <PreviewSection section={section} />
+                    </div>
                 ))}
             </div>
         </div>

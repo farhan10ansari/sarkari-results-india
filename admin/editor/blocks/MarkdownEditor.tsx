@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { IMarkdownField } from '@/lib/page.types';
 import { Eye, Edit2 } from 'lucide-react';
+import { MarkdownRenderer } from '@/components/MarkdownRenderer';
 
 interface MarkdownEditorProps {
   block: IMarkdownField;
@@ -23,8 +23,14 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ block, onChange 
         </button>
       </div>
       {isPreview ? (
-        <div className="prose prose-sm max-w-none p-3 border rounded-md bg-slate-50 min-h-[100px] text-slate-800">
-          <ReactMarkdown>{block.value || '*No content provided*'}</ReactMarkdown>
+        <div className="p-3 border rounded-md bg-slate-50 dark:bg-slate-800 min-h-[100px]">
+          <MarkdownRenderer
+            content={block.value || '*No content provided*'}
+            size="sm"
+            textColor="text-slate-800 dark:text-slate-200"
+            headingColor="text-slate-900 dark:text-white"
+            backgroundColor="bg-slate-50 dark:bg-slate-800"
+          />
         </div>
       ) : (
         <textarea
