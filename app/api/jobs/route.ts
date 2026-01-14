@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import dbConnect from '@/db/mongodb';
 import Page from '@/db/models/page-model';
 import { PageType, PageStatus } from '@/lib/page.types';
+import { APIResponse } from '@/lib/api';
 
 /**
  * Public Jobs API Route
@@ -20,25 +21,6 @@ import { PageType, PageStatus } from '@/lib/page.types';
  * - Only returns published jobs
  */
 
-interface APIResponse {
-  success: boolean;
-  message: string;
-  data?: any;
-}
-
-function createResponse(success: boolean, message: string, data: any = null, status: number = 200): NextResponse {
-  const response: APIResponse = {
-    success,
-    message,
-  };
-
-  if (data !== null) {
-    response.data = data;
-  }
-
-  return NextResponse.json(response, { status });
-}
-
 export async function GET(request: NextRequest) {
   try {
     await dbConnect();
@@ -51,7 +33,7 @@ export async function GET(request: NextRequest) {
 
     // Validate pagination parameters
     if (page < 1 || limit < 1 || limit > 100) {
-      return createResponse(
+      return APIResponse(
         false,
         'Invalid pagination parameters',
         null,
@@ -101,7 +83,7 @@ export async function GET(request: NextRequest) {
       ? `Found ${jobs.length} job(s) matching: ${filters.join(', ')} (Page ${page} of ${totalPages})`
       : `Retrieved ${jobs.length} job(s) (Page ${page} of ${totalPages})`;
 
-    return createResponse(
+    return APIResponse(
       true,
       message,
       {
@@ -119,7 +101,7 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     console.error('Error fetching jobs:', error);
 
-    return createResponse(
+    return APIResponse(
       false,
       'An error occurred while fetching jobs',
       null,
