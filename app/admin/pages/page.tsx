@@ -36,7 +36,6 @@ import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 
 export default function AllPages() {
     const [pages, setPages] = useState<IPage[]>([]);
-    console.log(pages);
     const [loading, setLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [page, setPage] = useState(1);

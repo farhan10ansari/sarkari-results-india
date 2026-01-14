@@ -30,7 +30,6 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
 
   const { page, updateMetadata, addSection } = usePageStore();
-  console.log("page", page);
   const [isStartDatePickerOpen, setIsStartDatePickerOpen] = React.useState(false);
   const [isLastDatePickerOpen, setIsLastDatePickerOpen] = React.useState(false);
   if (!isVisible) return null;

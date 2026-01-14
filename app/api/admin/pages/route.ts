@@ -12,8 +12,6 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json() as IPage;
 
-    console.log('Received page:', body);
-
     // Basic validation
     if (!body.title || !body.slug || !body.type || !body.category) {
       return APIResponse(

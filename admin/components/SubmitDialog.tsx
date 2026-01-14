@@ -28,7 +28,6 @@ export default function SubmitDialog() {
             setIsSubmitting(true);
 
             // submit logic 
-            console.log("submitting")
 
             let res;
             if (pageId) {
