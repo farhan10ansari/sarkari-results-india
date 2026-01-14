@@ -6,19 +6,19 @@ import Page from "@/db/models/page-model";
 /**
  * JobsPage Server Component
  * 
- * Server-side rendered page that fetches initial job data for fast loading.
- * The initial data is then passed to the client component which handles
- * filtering and pagination using the public jobs API.
+ * Statically generated page that fetches initial job data at build time.
+ * The page is cached and revalidated every 10 minutes using ISR.
+ * All filtering and search is handled client-side for optimal performance.
  * 
  * Benefits:
- * - Fast initial page load with server-side rendering
- * - SEO-friendly with pre-rendered content
- * - Caching at the server level
- * - Client-side interactivity for filters
- * - Direct database access (no API overhead for initial load)
+ * - Lightning-fast page loads (pre-rendered at build time)
+ * - SEO-friendly with static content
+ * - Automatic revalidation every 1 minutes
+ * - Client-side filtering via public API
+ * - No loading state on direct navigation
  * 
- * Note: This server component directly accesses the database.
- * Client-side filtering uses the public /api/jobs endpoint.
+ * Note: This page is statically generated (force-static).
+ * All dynamic filtering uses the client-side /api/jobs endpoint.
  */
 
 interface JobsResponse {
@@ -32,52 +32,30 @@ interface JobsResponse {
   };
 }
 
-interface PageProps {
-  searchParams: {
-    category?: string;
-    search?: string;
-  };
-}
-
-async function getInitialJobs(category?: string, search?: string): Promise<JobsResponse> {
+async function getInitialJobs(): Promise<JobsResponse> {
   try {
     await dbConnect();
 
-    // Build query
-    const query: any = {
+    // Simple query - fetch all published jobs
+    const query = {
       type: PageType.JOB,
       status: PageStatus.PUBLISHED,
     };
 
-    if (category && category !== "all") {
-      query.category = category;
-    }
-
-    // Add search functionality
-    if (search) {
-      query.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } },
-        { category: { $regex: search, $options: 'i' } },
-      ];
-    }
-
     const page = 1;
     const limit = 12;
-    const skip = (page - 1) * limit;
 
-    // Fetch pages with pagination
+    // Fetch latest jobs for initial page load
     const pages = await Page.find(query)
       .select('_id title slug category status updatedAt type importantDates description')
       .sort({ updatedAt: -1 })
-      .skip(skip)
       .limit(limit)
       .lean();
 
     const total = await Page.countDocuments(query);
     const totalPages = Math.ceil(total / limit);
 
-    // Convert MongoDB documents to plain objects
+    // Convert MongoDB documents to plain objects for serialization
     const serializedJobs = JSON.parse(JSON.stringify(pages));
 
     return {
@@ -92,7 +70,7 @@ async function getInitialJobs(category?: string, search?: string): Promise<JobsR
     };
   } catch (error) {
     console.error('Error fetching initial jobs:', error);
-    // Return empty data on error
+    // Return empty data on error to prevent page crash
     return {
       jobs: [],
       pagination: {
@@ -106,27 +84,26 @@ async function getInitialJobs(category?: string, search?: string): Promise<JobsR
   }
 }
 
-export default async function JobsPage({ searchParams }: PageProps) {
-  // Await searchParams as it's async in Next.js 15+
-  const params = await searchParams;
-  const category = params.category || "all";
-  const search = params.search || "";
-
-  // Fetch initial data on the server
-  const initialData = await getInitialJobs(
-    category !== "all" ? category : undefined,
-    search
-  );
-
-  // Pass initial data to client component
+export default async function JobsPage() {
+  const initialData = await getInitialJobs();
+  
   return (
     <JobsClient
       initialData={initialData}
-      initialCategory={category}
-      initialSearch={search}
+      initialCategory="all"
+      initialSearch=""
     />
   );
 }
+
+// Revalidate every 1 minutes (60 seconds)
+// This enables Incremental Static Regeneration (ISR)
+// The page will be cached and regenerated in the background every 10 minutes
+export const revalidate = 60;
+
+// Force static rendering for this page
+// This ensures the page is pre-rendered at build time and cached
+export const dynamic = 'force-static';
 
 // Metadata for SEO
 export const metadata = {
