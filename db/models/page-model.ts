@@ -33,10 +33,6 @@ const PageSchema = new Schema<IPage>(
     publishedAt: {
       type: String,
     },
-    updatedAt: {
-      type: String,
-      default: () => new Date().toISOString(),
-    },
     type: {
       type: String,
       enum: Object.values(PageType),

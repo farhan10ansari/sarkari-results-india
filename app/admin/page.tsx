@@ -267,6 +267,7 @@ const DashboardHome: React.FC = () => {
                                     <TableHead className="px-6 py-4 font-bold text-slate-500 uppercase text-xs">Category</TableHead>
                                     <TableHead className="px-6 py-4 font-bold text-slate-500 uppercase text-xs">Type</TableHead>
                                     <TableHead className="px-6 py-4 font-bold text-slate-500 uppercase text-xs">Status</TableHead>
+                                    <TableHead className="px-6 py-4 font-bold text-slate-500 uppercase text-xs">Created</TableHead>
                                     <TableHead className="px-6 py-4 font-bold text-slate-500 uppercase text-xs">Updated</TableHead>
                                     <TableHead className="px-6 py-4 font-bold text-slate-500 uppercase text-xs text-right">Action</TableHead>
                                 </TableRow>
@@ -316,7 +317,20 @@ const DashboardHome: React.FC = () => {
                                             </DropdownMenu>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">
-                                            {pageItem.updatedAt ? format(new Date(pageItem.updatedAt), 'MMM dd, yyyy') : '-'}
+                                            {pageItem.createdAt ? (
+                                                <>
+                                                    <div>{format(new Date(pageItem.createdAt), 'MMM dd, yyyy')}</div>
+                                                    <div className="text-[10px] text-slate-400">{format(new Date(pageItem.createdAt), 'hh:mm a')}</div>
+                                                </>
+                                            ) : '-'}
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">
+                                            {pageItem.updatedAt ? (
+                                                <>
+                                                    <div>{format(new Date(pageItem.updatedAt), 'MMM dd, yyyy')}</div>
+                                                    <div className="text-[10px] text-slate-400">{format(new Date(pageItem.updatedAt), 'hh:mm a')}</div>
+                                                </>
+                                            ) : '-'}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">

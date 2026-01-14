@@ -29,7 +29,7 @@ export default function AiDialog() {
         setLoading(true);
         try {
             const data = await parsePageDescriptionWithAI(aiInput);
-            setPage({ ...data, updatedAt: new Date().toISOString() } as any);
+            setPage(data as any);
             setIsModalOpen(false)
         } catch (e) { 
             toast.error("Failed to extract data."); 

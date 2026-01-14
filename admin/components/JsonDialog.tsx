@@ -317,7 +317,7 @@ function validatePageSchema(page: any): string | null {
 
     const allowed = [
         "schemaVersion", "_id", "title", "slug", "description",
-        "publishedAt", "updatedAt", "type", "status",
+        "publishedAt", "type", "status",
         "displayConfig", "metadata", "category", "importantDates", "sections"
     ];
 

@@ -43,7 +43,6 @@ function getInitialPage(): IPageWithoutId {
     title: '',
     slug: '',
     description: '',
-    updatedAt: new Date().toISOString(),
     type: PageType.JOB,
     sections: []
   }
@@ -58,7 +57,7 @@ export const usePageStore = create<PageState>((set) => ({
   setPage: (page) => set({ page }),
 
   updateMetadata: (updates) => set((state) => ({
-    page: { ...state.page, ...updates, updatedAt: new Date().toISOString() }
+    page: { ...state.page, ...updates }
   })),
 
   addSection: () => set((state) => {

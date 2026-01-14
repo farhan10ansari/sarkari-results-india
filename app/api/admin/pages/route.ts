@@ -56,7 +56,6 @@ export async function POST(request: NextRequest) {
       displayConfig: body.displayConfig || {},
       metadata: body.metadata || {},
       sections: body.sections || [],
-      updatedAt: new Date().toISOString(),
     };
 
     // Create the page
@@ -147,7 +146,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch pages with pagination - include importantDates for job cards
     const pages = await Page.find(query)
-      .select('_id title slug category status updatedAt type importantDates description')
+      .select('_id title slug category status createdAt updatedAt type importantDates description')
       .sort({ updatedAt: -1 })
       .skip(skip)
       .limit(limit);

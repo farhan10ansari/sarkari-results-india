@@ -20,7 +20,7 @@ export async function GET(request: NextRequest, props: Props) {
             return APIResponse(false, 'Page ID is required', null, 400);
         }
 
-        const page = await Page.findById(id).select('-createdAt -__v'); // Remove createdAt and __v fields
+        const page = await Page.findById(id).select('-createdAt -updatedAt -__v'); // Remove createdAt, updatedAt, and __v fields
 
         if (!page) {
             return APIResponse(false, 'Page not found', null, 404);
@@ -49,13 +49,10 @@ export async function PATCH(request: NextRequest, props: Props) {
         const updatedPage = await Page.findByIdAndUpdate(
             id,
             {
-                $set: {
-                    ...body,
-                    updatedAt: new Date().toISOString()
-                }
+                $set: body
             },
             { new: true, runValidators: true }
-        ).select('-createdAt -__v');
+        ).select('-__v');
 
         if (!updatedPage) {
             return APIResponse(false, 'Page not found', null, 404);
