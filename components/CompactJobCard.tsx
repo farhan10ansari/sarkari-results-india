@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Calendar, Briefcase } from "lucide-react";
+import { Briefcase } from "lucide-react";
 import { Badge } from "./ui/badge";
 
 /**
@@ -31,10 +31,22 @@ export function CompactJobCard({
 }: CompactJobCardProps) {
   return (
     <Link href={`/page/${id}`}>
-      <div className="group h-full min-h-[140px] flex flex-col rounded-xl border border-gray-200 bg-gradient-to-br from-white to-gray-50 p-4 transition-all hover:scale-[1.02] hover:border-[#1173d4] hover:shadow-lg dark:border-gray-800 dark:from-gray-900 dark:to-gray-800 dark:hover:border-[#1173d4]">
-        {/* Status Badge */}
-        {lastDate && (
-          <div className="mb-3 flex justify-end">
+      <div className="group h-full min-h-[110px] flex flex-col rounded-xl border border-gray-200 bg-gradient-to-br from-white to-gray-50 p-3.5 transition-all hover:scale-[1.02] hover:border-[#1173d4] hover:shadow-lg dark:border-gray-800 dark:from-gray-900 dark:to-gray-800 dark:hover:border-[#1173d4]">
+        {/* Title */}
+        <h3 className="mb-2.5 line-clamp-2 flex-1 text-sm font-bold text-gray-900 group-hover:text-[#1173d4] dark:text-white dark:group-hover:text-[#1173d4] transition-colors">
+          {title}
+        </h3>
+        
+        {/* Bottom: Category Badge and Status Badge */}
+        <div className="flex items-center justify-between gap-2 mt-auto">
+          <div className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 px-2.5 py-1 dark:from-blue-900/30 dark:to-indigo-900/30">
+            <Briefcase className="h-3 w-3 text-[#1173d4]" />
+            <span className="text-xs font-semibold text-[#1173d4] dark:text-blue-400">
+              {category}
+            </span>
+          </div>
+          
+          {lastDate && (
             <Badge 
               variant="secondary" 
               className={`text-xs font-medium shadow-sm ${
@@ -45,22 +57,7 @@ export function CompactJobCard({
             >
               {new Date(lastDate) > new Date() ? "✓ Active" : "✕ Closed"}
             </Badge>
-          </div>
-        )}
-        
-        {/* Title */}
-        <h3 className="mb-3 line-clamp-2 flex-1 text-base font-bold text-gray-900 group-hover:text-[#1173d4] dark:text-white dark:group-hover:text-[#1173d4] transition-colors">
-          {title}
-        </h3>
-        
-        {/* Category Badge */}
-        <div className="flex items-center gap-2 mt-auto">
-          <div className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1.5 dark:from-blue-900/30 dark:to-indigo-900/30">
-            <Briefcase className="h-3.5 w-3.5 text-[#1173d4]" />
-            <span className="text-xs font-semibold text-[#1173d4] dark:text-blue-400">
-              {category}
-            </span>
-          </div>
+          )}
         </div>
       </div>
     </Link>
